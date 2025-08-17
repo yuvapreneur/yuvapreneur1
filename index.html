@@ -48,7 +48,8 @@
     #reader{user-select:none}
     #reader img{pointer-events:none}
   </style>
-  <!-- Direct payment link - no external scripts needed -->
+  <!-- Razorpay Checkout.js -->
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 </head>
 <body>
   <header class="top">
@@ -71,7 +72,7 @@
       <div style="display:flex;gap:16px;align-items:center;margin-top:20px;flex-wrap:wrap">
         <div class="priceTag">
           <span>Launch Offer</span>
-          <span class="rupee">₹1</span>
+          <span class="rupee">₹299</span>
         </div>
         <div class="muted small">Will increase to <b>₹799</b> after the timer.<br>
           <span class="pill">⏳ Offer ends in <span id="countdown">--:--:--</span></span>
@@ -174,8 +175,8 @@
           <div style="grid-column:1/-1;display:flex;align-items:center;gap:10px" class="small">
             <input type="checkbox" id="agree" checked /> <label for="agree">I agree to the Terms and Privacy Policy.</label>
           </div>
-          <div style="grid-column:1/-1;display:flex;align-items:center;justify-content:space-between">
-            <div class="small muted">Payable today: <b>₹1</b> (will be ₹799 later)</div>
+          <div style="grid-column:1/-1;display:flex:align-items:center;justify-content:space-between">
+            <div class="small muted">Payable today: <b>₹299</b> (will be ₹799 later)</div>
             <button class="btn btn-primary" type="submit">Enroll & Pay →</button>
           </div>
         </form>
@@ -209,8 +210,8 @@
               <b>Festival & Seasonal Marketing Guide: Strategies to Double Sales</b>
               <p class="muted small">Plan irresistible festival offers, content, and promos that turn holidays into revenue spikes.</p>
               <div style="display:flex;align-items:center;justify-content:space-between;margin-top:8px">
-                              <div class="small">₹1</div>
-              <button class="btn btn-primary small" onclick="buyBonus('bonus-seasonal-marketing',1)">Buy & Access →</button>
+                <div class="small">₹1</div>
+                <button class="btn btn-primary small" onclick="buyBonus('bonus-seasonal-marketing',1)">Buy & Access →</button>
               </div>
             </div>
           </div>
@@ -250,7 +251,7 @@
       <div class="grid">
         <details class="card"><summary><b>Will I be able to download the eBook?</b></summary><p class="muted">No. Access is read‑only inside your account to protect course IP. Downloads and print are disabled.</p></details>
         <details class="card"><summary><b>How do modules unlock?</b></summary><p class="muted">After successful payment, Module 1 unlocks instantly. Each subsequent module unlocks after you complete the previous one.</p></details>
-        <details class="card"><summary><b>Is ₹1 a lifetime deal?</b></summary><p class="muted">Yes, for early buyers during the countdown. After the timer, the price switches to ₹799.</p></details>
+        <details class="card"><summary><b>Is ₹299 a lifetime deal?</b></summary><p class="muted">Yes, for early buyers during the countdown. After the timer, the price switches to ₹799.</p></details>
         <details class="card"><summary><b>How do I reset my password?</b></summary><p class="muted">Use “Forgot password”. Enter your phone or email to receive an OTP, then set a new password.</p></details>
         <details class="card"><summary><b>How is payment handled?</b></summary><p class="muted">Payments go through Razorpay’s secure checkout. You’ll be redirected back automatically after success.</p></details>
       </div>
@@ -345,27 +346,11 @@
       cd.textContent = `${h}:${m}:${s}`;
     },1000);
 
-    // Configuration - Direct payment link only
-    const PAYMENT_LINK = 'https://rzp.io/rzp/qwMUcGg';
-    
-    // Verify payment link is accessible
-    function verifyPaymentLink() {
-      const link = document.createElement('a');
-      link.href = PAYMENT_LINK;
-      link.target = '_blank';
-      link.style.display = 'none';
-      document.body.appendChild(link);
-      
-      // Test if link is accessible
-      try {
-        link.click();
-        document.body.removeChild(link);
-        return true;
-      } catch (error) {
-        console.error('Payment link verification failed:', error);
-        return false;
-      }
-    }
+    // Razorpay Configuration
+    const RAZORPAY_KEY_ID = 'rzp_live_R6PgmUFBJDWd3o';
+    const PAYMENT_AMOUNT = 29900; // ₹299 in paise
+    const PAYMENT_CURRENCY = 'INR';
+    const SUCCESS_URL = 'https://yuvapreneur.in/success.html';
     
     // Simple in-memory demo store (NOT PRODUCTION - replace with your backend)
     const store = { users: {}, modulesUnlocked: {} };
@@ -384,7 +369,7 @@
     }
     function openForgot(e){ e && e.preventDefault(); document.getElementById('loginDlg').close(); document.getElementById('forgotDlg').showModal(); return false; }
 
-    // Handle payment for main course - Direct payment link
+    // Handle payment for main course - Razorpay Checkout.js popup
     function handlePay(formData) {
       try {
         // Store user data locally for demo purposes
@@ -392,35 +377,46 @@
         store.users[key] = { ...formData, paid: false, userId: Date.now().toString() };
         localStorage.setItem('yuv_userKey', key);
         
-        // Show payment instructions
-        const confirmed = confirm(`Payment Instructions:
-        
-1. You'll be redirected to Razorpay payment page
-2. Complete your payment of ₹1
-3. After payment, you'll be redirected back
-4. Your account will be activated automatically
-
-Click OK to proceed to payment.`);
-        
-        if (confirmed) {
-          // Redirect to Razorpay payment link
-          console.log('Redirecting to payment:', PAYMENT_LINK);
-          
-          // Verify payment link first
-          if (verifyPaymentLink()) {
-            // Try to redirect to payment
-            try {
-              window.location.href = PAYMENT_LINK;
-            } catch (redirectError) {
-              console.error('Redirect failed:', redirectError);
-              // Fallback: open in new tab
-              window.open(PAYMENT_LINK, '_blank');
-              alert('Payment page opened in new tab. Please complete payment there.');
+        // Create Razorpay order options
+        const options = {
+          key: RAZORPAY_KEY_ID,
+          amount: PAYMENT_AMOUNT,
+          currency: PAYMENT_CURRENCY,
+          name: 'yuvapreneur.in',
+          description: 'Café Business Course - Complete 12 Module Course',
+          image: 'https://yuvapreneur.in/favicon.ico', // Optional: your logo
+          order_id: 'order_' + Date.now(),
+          handler: function (response) {
+            // Payment successful
+            console.log('Payment successful:', response);
+            
+            // Update user payment status
+            store.users[key].paid = true;
+            store.users[key].paymentId = response.razorpay_payment_id;
+            localStorage.setItem('yuv_userKey', key);
+            
+            // Redirect to success page
+            window.location.href = SUCCESS_URL;
+          },
+          prefill: {
+            name: formData.name,
+            email: formData.email,
+            contact: formData.phone
+          },
+          theme: {
+            color: '#0f172a'
+          },
+          modal: {
+            ondismiss: function() {
+              console.log('Payment cancelled by user');
             }
-          } else {
-            alert('Payment link verification failed. Please contact support.');
           }
-        }
+        };
+        
+        // Initialize and open Razorpay checkout
+        const rzp = new Razorpay(options);
+        rzp.open();
+        
       } catch (error) {
         console.error('Payment error:', error);
         alert('There was an issue with the payment setup. Please try again.');
@@ -633,7 +629,7 @@ Click OK to proceed to payment.`);
       renderModules(next);
     }
 
-    // Bonus payment functionality - Direct payment link
+    // Bonus payment functionality - Razorpay Checkout.js popup
     function buyBonus(bonusId, amount) {
       const userKey = localStorage.getItem('yuv_userKey');
       
@@ -643,23 +639,46 @@ Click OK to proceed to payment.`);
         return;
       }
 
-      // Show payment instructions for bonus
-      const confirmed = confirm(`Bonus Payment Instructions:
-      
-1. You'll be redirected to Razorpay payment page
-2. Complete your payment of ₹${amount}
-3. After payment, you'll be redirected back
-4. Bonus content will be unlocked automatically
-
-Click OK to proceed to payment.`);
-      
-      if (confirmed) {
-        // Store bonus info for demo purposes
-        store.bonuses = store.bonuses || {};
-        store.bonuses[bonusId] = { amount, purchased: false };
+      try {
+        // Create Razorpay order options for bonus
+        const options = {
+          key: RAZORPAY_KEY_ID,
+          amount: amount * 100, // Convert to paise
+          currency: PAYMENT_CURRENCY,
+          name: 'yuvapreneur.in',
+          description: `Bonus: ${getBonusTitle(bonusId)}`,
+          image: 'https://yuvapreneur.in/favicon.ico',
+          order_id: 'bonus_' + bonusId + '_' + Date.now(),
+          handler: function (response) {
+            // Bonus payment successful
+            console.log('Bonus payment successful:', response);
+            
+            // Mark bonus as purchased
+            if (store.bonuses && store.bonuses[bonusId]) {
+              store.bonuses[bonusId].purchased = true;
+              store.bonuses[bonusId].paymentId = response.razorpay_payment_id;
+              updateBonusUI(bonusId);
+            }
+            
+            alert('Bonus purchased successfully! You now have access to this content.');
+          },
+          prefill: {
+            name: store.users[userKey]?.name || '',
+            email: store.users[userKey]?.email || '',
+            contact: store.users[userKey]?.phone || ''
+          },
+          theme: {
+            color: '#0f172a'
+          }
+        };
         
-        // Redirect to Razorpay payment link
-        window.location.href = PAYMENT_LINK;
+        // Initialize and open Razorpay checkout
+        const rzp = new Razorpay(options);
+        rzp.open();
+        
+      } catch (error) {
+        console.error('Bonus payment error:', error);
+        alert('There was an issue with the bonus payment setup. Please try again.');
       }
     }
 
