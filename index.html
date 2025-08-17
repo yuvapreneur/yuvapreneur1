@@ -346,7 +346,26 @@
     },1000);
 
     // Configuration - Direct payment link only
-    const PAYMENT_LINK = 'https://rzp.io/rzp/WkSmxWB5';
+    const PAYMENT_LINK = 'https://rzp.io/rzp/qwMUcGg';
+    
+    // Verify payment link is accessible
+    function verifyPaymentLink() {
+      const link = document.createElement('a');
+      link.href = PAYMENT_LINK;
+      link.target = '_blank';
+      link.style.display = 'none';
+      document.body.appendChild(link);
+      
+      // Test if link is accessible
+      try {
+        link.click();
+        document.body.removeChild(link);
+        return true;
+      } catch (error) {
+        console.error('Payment link verification failed:', error);
+        return false;
+      }
+    }
     
     // Simple in-memory demo store (NOT PRODUCTION - replace with your backend)
     const store = { users: {}, modulesUnlocked: {} };
@@ -367,24 +386,44 @@
 
     // Handle payment for main course - Direct payment link
     function handlePay(formData) {
-      // Store user data locally for demo purposes
-      const key = formData.email || formData.phone;
-      store.users[key] = { ...formData, paid: false, userId: Date.now().toString() };
-      localStorage.setItem('yuv_userKey', key);
-      
-      // Show payment instructions
-      const confirmed = confirm(`Payment Instructions:
-      
+      try {
+        // Store user data locally for demo purposes
+        const key = formData.email || formData.phone;
+        store.users[key] = { ...formData, paid: false, userId: Date.now().toString() };
+        localStorage.setItem('yuv_userKey', key);
+        
+        // Show payment instructions
+        const confirmed = confirm(`Payment Instructions:
+        
 1. You'll be redirected to Razorpay payment page
 2. Complete your payment of ₹1
 3. After payment, you'll be redirected back
 4. Your account will be activated automatically
 
 Click OK to proceed to payment.`);
-      
-      if (confirmed) {
-        // Redirect to Razorpay payment link
-        window.location.href = PAYMENT_LINK;
+        
+        if (confirmed) {
+          // Redirect to Razorpay payment link
+          console.log('Redirecting to payment:', PAYMENT_LINK);
+          
+          // Verify payment link first
+          if (verifyPaymentLink()) {
+            // Try to redirect to payment
+            try {
+              window.location.href = PAYMENT_LINK;
+            } catch (redirectError) {
+              console.error('Redirect failed:', redirectError);
+              // Fallback: open in new tab
+              window.open(PAYMENT_LINK, '_blank');
+              alert('Payment page opened in new tab. Please complete payment there.');
+            }
+          } else {
+            alert('Payment link verification failed. Please contact support.');
+          }
+        }
+      } catch (error) {
+        console.error('Payment error:', error);
+        alert('There was an issue with the payment setup. Please try again.');
       }
     }
 
