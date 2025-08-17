@@ -264,6 +264,15 @@
         <p class="muted small" id="readerStatus">Please login to access your modules.</p>
         <div id="modulesList" class="clean small" style="display:grid;gap:8px;margin-top:8px"></div>
         <div id="readerContent" class="muted" style="margin-top:12px"></div>
+        <div style="margin-top:16px; padding:12px; background:#f1f5f9; border-radius:8px; border:1px solid #e2e8f0;">
+          <p class="small muted" style="margin:0 0 8px 0;">Demo Mode - Testing Only:</p>
+          <button class="btn btn-primary small" onclick="simulatePaymentSuccess()" style="margin-right:8px;">
+            Simulate Payment Success
+          </button>
+          <button class="btn btn-outline small" onclick="resetPaymentStatus()">
+            Reset Payment Status
+          </button>
+        </div>
       </div>
     </section>
   </main>
@@ -379,18 +388,19 @@ Click OK to proceed to payment.`);
       }
     }
 
-    // Demo function - In real scenario, this would be handled by webhook
-    function verifyPayment(response, formData) {
-      // For demo purposes, we'll simulate successful payment
-      const key = formData.email || formData.phone;
-      store.users[key] = { ...formData, paid: true, userId: Date.now().toString() };
-      localStorage.setItem('yuv_userKey', key);
-      
-      alert('Payment successful! Your account has been activated.');
-      
-      // Show success message and redirect to course
-      document.getElementById('readerStatus').textContent = 'Payment successful! Module 1 unlocked.';
-      renderModules(1);
+    // Demo function - Simulate successful payment after redirect
+    function simulatePaymentSuccess() {
+      const userKey = localStorage.getItem('yuv_userKey');
+      if (userKey && store.users[userKey]) {
+        store.users[userKey].paid = true;
+        
+        // Show success message
+        alert('Payment successful! Your account has been activated.');
+        
+        // Update UI
+        document.getElementById('readerStatus').textContent = 'Payment successful! Module 1 unlocked.';
+        renderModules(1);
+      }
     }
 
     function enroll(e){
@@ -660,9 +670,35 @@ Click OK to proceed to payment.`);
           console.log('User has paid access');
         } else {
           console.log('User needs to complete payment');
+          // Check if user is returning from payment (demo mode)
+          checkPaymentReturn();
         }
       }
     })();
+    
+    // Check if user is returning from payment (demo mode)
+    function checkPaymentReturn() {
+      // In demo mode, we'll simulate payment success after a delay
+      // In real scenario, this would be handled by webhook or redirect parameters
+      setTimeout(() => {
+        const userKey = localStorage.getItem('yuv_userKey');
+        if (userKey && store.users[userKey] && !store.users[userKey].paid) {
+          // Simulate payment success for demo
+          simulatePaymentSuccess();
+        }
+      }, 2000); // Wait 2 seconds to simulate payment processing
+    }
+    
+    // Reset payment status for testing
+    function resetPaymentStatus() {
+      const userKey = localStorage.getItem('yuv_userKey');
+      if (userKey && store.users[userKey]) {
+        store.users[userKey].paid = false;
+        document.getElementById('readerStatus').textContent = 'Payment status reset. Please complete payment.';
+        renderModules(0);
+        alert('Payment status has been reset. You can now test the payment flow again.');
+      }
+    }
   </script>
 </body>
 </html>
