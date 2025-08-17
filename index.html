@@ -49,7 +49,7 @@
     #reader img{pointer-events:none}
   </style>
   <!-- Razorpay Checkout.js -->
-  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <script src="https://checkout.razorpay.com/v1/checkout.js" onload="console.log('Razorpay loaded successfully')" onerror="console.error('Failed to load Razorpay')"></script>
 </head>
 <body>
   <header class="top">
@@ -332,6 +332,17 @@
   <script>
     // Year
     document.getElementById('yr').textContent = new Date().getFullYear();
+    
+    // Check Razorpay on page load
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(() => {
+        if (isRazorpayReady()) {
+          console.log('✅ Razorpay is ready and working');
+        } else {
+          console.warn('⚠️ Razorpay is not ready yet');
+        }
+      }, 1000);
+    });
 
     // Countdown (48h)
     const target = new Date();
@@ -351,6 +362,32 @@
     const PAYMENT_AMOUNT = 29900; // ₹299 in paise
     const PAYMENT_CURRENCY = 'INR';
     const SUCCESS_URL = 'https://yuvapreneur.in/success.html';
+    
+    // Check if Razorpay is ready
+    function isRazorpayReady() {
+      return typeof Razorpay !== 'undefined' && typeof Razorpay.prototype.open === 'function';
+    }
+    
+    // Wait for Razorpay to be ready
+    function waitForRazorpay(callback, maxWait = 10000) {
+      if (isRazorpayReady()) {
+        callback();
+        return;
+      }
+      
+      let waitTime = 0;
+      const checkInterval = setInterval(() => {
+        waitTime += 100;
+        if (isRazorpayReady()) {
+          clearInterval(checkInterval);
+          callback();
+        } else if (waitTime >= maxWait) {
+          clearInterval(checkInterval);
+          console.error('Razorpay failed to load within', maxWait, 'ms');
+          alert('Payment system is not ready. Please refresh the page and try again.');
+        }
+      }, 100);
+    }
     
     // Simple in-memory demo store (NOT PRODUCTION - replace with your backend)
     const store = { users: {}, modulesUnlocked: {} };
@@ -372,6 +409,12 @@
     // Handle payment for main course - Razorpay Checkout.js popup
     function handlePay(formData) {
       try {
+        // Check if Razorpay is loaded
+        if (typeof Razorpay === 'undefined') {
+          alert('Razorpay is not loaded. Please refresh the page and try again.');
+          return;
+        }
+        
         // Store user data locally for demo purposes
         const key = formData.email || formData.phone;
         store.users[key] = { ...formData, paid: false, userId: Date.now().toString() };
@@ -384,7 +427,7 @@
           currency: PAYMENT_CURRENCY,
           name: 'yuvapreneur.in',
           description: 'Café Business Course - Complete 12 Module Course',
-          image: 'https://yuvapreneur.in/favicon.ico', // Optional: your logo
+          image: 'https://yuvapreneur.in/favicon.ico',
           order_id: 'order_' + Date.now(),
           handler: function (response) {
             // Payment successful
@@ -410,12 +453,49 @@
             ondismiss: function() {
               console.log('Payment cancelled by user');
             }
+          },
+          notes: {
+            course: 'Café Business Course',
+            user_id: key
+          },
+          config: {
+            display: {
+              blocks: {
+                banks: {
+                  name: "Pay using UPI",
+                  instruments: [
+                    {
+                      method: "card"
+                    },
+                    {
+                      method: "netbanking"
+                    },
+                    {
+                      method: "wallet"
+                    },
+                    {
+                      method: "upi"
+                    }
+                  ]
+                }
+              }
+            }
           }
         };
         
-        // Initialize and open Razorpay checkout
-        const rzp = new Razorpay(options);
-        rzp.open();
+        console.log('Opening Razorpay with options:', options);
+        
+        // Wait for Razorpay to be ready before opening
+        waitForRazorpay(() => {
+          try {
+            // Initialize and open Razorpay checkout
+            const rzp = new Razorpay(options);
+            rzp.open();
+          } catch (openError) {
+            console.error('Error opening Razorpay:', openError);
+            alert('Failed to open payment popup. Please try again.');
+          }
+        });
         
       } catch (error) {
         console.error('Payment error:', error);
@@ -640,6 +720,12 @@
       }
 
       try {
+        // Check if Razorpay is loaded
+        if (typeof Razorpay === 'undefined') {
+          alert('Razorpay is not loaded. Please refresh the page and try again.');
+          return;
+        }
+        
         // Create Razorpay order options for bonus
         const options = {
           key: RAZORPAY_KEY_ID,
@@ -669,12 +755,27 @@
           },
           theme: {
             color: '#0f172a'
+          },
+          notes: {
+            bonus_id: bonusId,
+            course: 'Café Business Course Bonus',
+            user_id: userKey
           }
         };
         
-        // Initialize and open Razorpay checkout
-        const rzp = new Razorpay(options);
-        rzp.open();
+        console.log('Opening Razorpay for bonus with options:', options);
+        
+        // Wait for Razorpay to be ready before opening
+        waitForRazorpay(() => {
+          try {
+            // Initialize and open Razorpay checkout
+            const rzp = new Razorpay(options);
+            rzp.open();
+          } catch (openError) {
+            console.error('Error opening Razorpay for bonus:', openError);
+            alert('Failed to open payment popup. Please try again.');
+          }
+        });
         
       } catch (error) {
         console.error('Bonus payment error:', error);
