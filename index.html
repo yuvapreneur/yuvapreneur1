@@ -56,8 +56,7 @@
     <div class="container row">
       <div class="logo">🚀 yuvapreneur.in</div>
       <div>
-        <button class="btn btn-primary small" onclick="openLogin()">Login</button>
-        <button class="btn btn-outline small" onclick="openEnrollmentForm()">Create account</button>
+        <button class="btn btn-outline small" onclick="openEnrollmentForm()">Enroll Now</button>
       </div>
     </div>
   </header>
@@ -175,7 +174,7 @@
           <div style="grid-column:1/-1;display:flex;align-items:center;gap:10px" class="small">
             <input type="checkbox" id="agree" checked /> <label for="agree">I agree to the Terms and Privacy Policy.</label>
           </div>
-          <div style="grid-column:1/-1;display:flex:align-items:center;justify-content:space-between">
+          <div style="grid-column:1/-1;display:flex;align-items:center;justify-content:space-between">
             <div class="small muted">Payable today: <b>₹299</b> (will be ₹799 later)</div>
             <button class="btn btn-primary" type="submit">Enroll & Pay →</button>
           </div>
@@ -258,24 +257,7 @@
       <p class="small muted" style="margin-top:12px">⚠️ If you face any issues, email <a href="mailto:supportyuvapreneur@gmail.com">supportyuvapreneur@gmail.com</a>.</p>
     </section>
 
-    <!-- READER (demo placeholder) -->
-    <section id="reader" class="container" style="padding-bottom:24px">
-      <div class="card">
-        <h2 style="margin:0 0 8px">Your Course Reader</h2>
-        <p class="muted small" id="readerStatus">Please login to access your modules.</p>
-        <div id="modulesList" class="clean small" style="display:grid;gap:8px;margin-top:8px"></div>
-        <div id="readerContent" class="muted" style="margin-top:12px"></div>
-        <div style="margin-top:16px; padding:12px; background:#f1f5f9; border-radius:8px; border:1px solid #e2e8f0;">
-          <p class="small muted" style="margin:0 0 8px 0;">Demo Mode - Testing Only:</p>
-          <button class="btn btn-primary small" onclick="simulatePaymentSuccess()" style="margin-right:8px;">
-            Simulate Payment Success
-          </button>
-          <button class="btn btn-outline small" onclick="resetPaymentStatus()">
-            Reset Payment Status
-          </button>
-        </div>
-      </div>
-    </section>
+
   </main>
 
   <footer class="footer">
@@ -300,34 +282,7 @@
     <p class="small muted center">© <span id="yr"></span> yuvapreneur.in • All rights reserved.</p>
   </footer>
 
-  <!-- LOGIN / FORGOT DIALOG (very simple demo) -->
-  <dialog id="loginDlg" style="border:none;border-radius:16px;max-width:420px;width:calc(100% - 32px);padding:0;">
-    <form method="dialog" class="card" style="margin:0">
-      <h3 style="margin:0 0 8px">Login to your account</h3>
-      <div class="input"><span>✉️</span><input id="loginId" placeholder="Phone or Email" /></div>
-      <div class="input" style="margin-top:8px"><span>🔒</span><input id="loginPass" type="password" placeholder="Password" /></div>
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:12px">
-        <button class="btn btn-primary" onclick="return doLogin(event)">Login</button>
-        <button class="btn btn-outline" onclick="return openForgot(event)">Forgot password?</button>
-      </div>
-    </form>
-  </dialog>
 
-  <dialog id="forgotDlg" style="border:none;border-radius:16px;max-width:420px;width:calc(100% - 32px);padding:0;">
-    <form method="dialog" class="card" style="margin:0">
-      <h3 style="margin:0 0 8px">Reset password</h3>
-      <div class="input"><span>✉️</span><input id="fpId" placeholder="Phone or Email" /></div>
-      <div style="display:flex;gap:8px;margin-top:8px">
-        <button class="btn btn-primary" onclick="return sendOtp(event)">Send OTP</button>
-        <span id="otpSentMsg" class="small muted" style="display:none">OTP sent (demo)</span>
-      </div>
-      <div id="otpBlock" class="hidden" style="margin-top:8px">
-        <div class="input"><span>📲</span><input id="fpOtp" placeholder="Enter OTP" /></div>
-        <div class="input" style="margin-top:8px"><span>🔒</span><input id="fpNew" type="password" placeholder="New password" /></div>
-        <button class="btn btn-outline" style="margin-top:8px" onclick="return doReset(event)">Reset Password</button>
-      </div>
-    </form>
-  </dialog>
 
   <script>
     // Year
@@ -394,8 +349,6 @@
 
     function scrollToId(id){ document.getElementById(id).scrollIntoView({behavior:'smooth'}); }
 
-    function openLogin(){ document.getElementById('loginDlg').showModal(); }
-    
     function openEnrollmentForm(){ 
       scrollToId('enroll');
       // Focus on the first input field for better UX
@@ -404,7 +357,6 @@
         if (firstInput) firstInput.focus();
       }, 500);
     }
-    function openForgot(e){ e && e.preventDefault(); document.getElementById('loginDlg').close(); document.getElementById('forgotDlg').showModal(); return false; }
 
     // Handle payment for main course - Razorpay Checkout.js popup
     function handlePay(formData) {
@@ -503,20 +455,7 @@
       }
     }
 
-    // Demo function - Simulate successful payment after redirect
-    function simulatePaymentSuccess() {
-      const userKey = localStorage.getItem('yuv_userKey');
-      if (userKey && store.users[userKey]) {
-        store.users[userKey].paid = true;
-        
-        // Show success message
-        alert('Payment successful! Your account has been activated.');
-        
-        // Update UI
-        document.getElementById('readerStatus').textContent = 'Payment successful! Module 1 unlocked.';
-        renderModules(1);
-      }
-    }
+
 
     function enroll(e){
       e.preventDefault();
@@ -531,183 +470,9 @@
       return false;
     }
 
-    // Authentication functions - Demo mode
-    function doLogin(e){
-      e && e.preventDefault();
-      const id = document.getElementById('loginId').value.trim();
-      const pass = document.getElementById('loginPass').value;
-      
-      // Demo login - check if user exists in local storage
-      const userKey = id;
-      const user = store.users[userKey];
-      
-      if (user && user.password === pass) {
-        localStorage.setItem('yuv_userKey', userKey);
-        document.getElementById('loginDlg').close();
-        document.getElementById('readerStatus').textContent = 'Logged in as ' + (user.name || 'User');
-        renderModules(user.paid ? 1 : 0);
-        
-        if (user.paid) {
-          alert('Welcome back! You have access to the course.');
-        } else {
-          alert('Please complete payment to access the course.');
-        }
-      } else {
-        alert('Invalid credentials. Please check your email/phone and password.');
-      }
-      return false;
-    }
 
-    function sendOtp(e){ 
-      e && e.preventDefault(); 
-      const id = document.getElementById('fpId').value.trim();
-      
-      // Demo OTP - show OTP block
-      document.getElementById('otpSentMsg').style.display = 'inline';
-      document.getElementById('otpBlock').classList.remove('hidden');
-      document.getElementById('otpSentMsg').textContent = 'Demo: OTP sent to ' + (id.includes('@') ? 'email' : 'phone') + ' (use 123456)';
-      return false; 
-    }
 
-    function doReset(e){ 
-      e && e.preventDefault(); 
-      const id = document.getElementById('fpId').value.trim();
-      const otp = document.getElementById('fpOtp').value;
-      const newPass = document.getElementById('fpNew').value;
-      
-      // Demo password reset - check if OTP is 123456
-      if (otp === '123456') {
-        // Update password in local storage
-        if (store.users[id]) {
-          store.users[id].password = newPass;
-          alert('Password updated successfully. Please login.');
-          document.getElementById('forgotDlg').close();
-          document.getElementById('loginDlg').showModal();
-        } else {
-          alert('User not found. Please check your email/phone.');
-        }
-      } else {
-        alert('Invalid OTP. Please use 123456 for demo.');
-      }
-      return false; 
-    }
 
-    // Secure reader with watermarking and protection
-    function renderModules(unlocked){
-      const list = document.getElementById('modulesList');
-      const content = document.getElementById('readerContent');
-      list.innerHTML=''; content.innerHTML='';
-      
-      if(!unlocked){ 
-        content.textContent='Please complete payment to unlock Module 1.'; 
-        return; 
-      }
-      
-      const titles=[
-        'Introduction to the Café Industry','Research & Market Analysis','Location Selection & Setup','Financial Planning & Investment','Kitchen Setup & Operations','Hiring & Team Management','Menu Design & Pricing','Marketing: Online + Offline','Licenses & Compliance','Technology & POS','Customer Experience & Loyalty','Scaling & Franchising'
-      ];
-      
-      for(let i=1;i<=12;i++){
-        const btn = document.createElement('button');
-        btn.textContent = i+'. '+titles[i-1];
-        btn.className = 'btn btn-outline small';
-        btn.style.justifyContent='space-between';
-        btn.style.display='flex';
-        btn.style.width='100%';
-        if(i>unlocked){ btn.disabled=true; btn.style.opacity=.6; }
-        btn.onclick=()=>{
-          loadSecureContent(i, titles[i-1]);
-        };
-        list.appendChild(btn);
-      }
-      // open first by default
-      list.querySelector('button').click();
-    }
-
-    // Load demo content
-    function loadSecureContent(moduleId, title) {
-      const content = document.getElementById('readerContent');
-      const userKey = localStorage.getItem('yuv_userKey');
-      
-      // Demo content for each module
-      const demoContent = {
-        1: `<p>Welcome to Module 1: Introduction to the Café Industry!</p>
-            <p>This module covers:</p>
-            <ul>
-              <li>Types of cafés and business models</li>
-              <li>Indian market analysis and trends</li>
-              <li>Market opportunities and challenges</li>
-            </ul>
-            <p>This is demo content. In the real course, you'll get comprehensive lessons with practical examples.</p>`,
-        2: `<p>Module 2: Research & Market Analysis</p>
-            <p>Learn how to:</p>
-            <ul>
-              <li>Identify your target customer segments</li>
-              <li>Conduct competitor analysis and SWOT</li>
-              <li>Define your unique selling proposition</li>
-            </ul>`,
-        3: `<p>Module 3: Location Selection & Setup</p>
-            <p>Key topics:</p>
-            <ul>
-              <li>Footfall benchmarks and analysis</li>
-              <li>Rent optimization (≤10% of sales)</li>
-              <li>Location accessibility checklist</li>
-            </ul>`
-      };
-      
-      const moduleContent = demoContent[moduleId] || `<p>Module ${moduleId}: ${title}</p><p>This module content will be available in the full course.</p>`;
-      
-      // Render content with watermark
-      content.innerHTML = `
-        <div class="small muted">Module ${moduleId}</div>
-        <h3>${title}</h3>
-        <div class="secure-content" style="position:relative;padding:20px;background:#fff;border-radius:12px;border:1px solid var(--line);">
-          <div class="watermark" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-45deg);font-size:48px;color:rgba(0,0,0,0.1);pointer-events:none;user-select:none;z-index:1;">
-            ${userKey}
-          </div>
-          <div style="position:relative;z-index:2;">
-            ${moduleContent}
-          </div>
-        </div>
-        <button class="btn btn-primary small" style="margin-top:8px" onclick="unlockNext(${moduleId})">Mark as Done</button>
-      `;
-      
-      // Apply security measures
-      applySecurityMeasures();
-    }
-
-    // Apply security measures to prevent copying/downloading
-    function applySecurityMeasures() {
-      const secureContent = document.querySelector('.secure-content');
-      if (!secureContent) return;
-      
-      // Disable right-click
-      secureContent.addEventListener('contextmenu', e => e.preventDefault());
-      
-      // Disable text selection
-      secureContent.style.userSelect = 'none';
-      secureContent.style.webkitUserSelect = 'none';
-      secureContent.style.mozUserSelect = 'none';
-      secureContent.style.msUserSelect = 'none';
-      
-      // Disable keyboard shortcuts
-      document.addEventListener('keydown', e => {
-        if (e.ctrlKey || e.metaKey) {
-          if (['c', 'a', 's', 'p', 'u'].includes(e.key)) {
-            e.preventDefault();
-          }
-        }
-        if (e.key === 'F12') e.preventDefault();
-      });
-      
-      // Disable print
-      window.addEventListener('beforeprint', e => e.preventDefault());
-    }
-
-    window.unlockNext = function(current){
-      const next = Math.min(12, current+1);
-      renderModules(next);
-    }
 
     // Bonus payment functionality - Razorpay Checkout.js popup
     function buyBonus(bonusId, amount) {
@@ -816,48 +581,7 @@
       }
     }
 
-    // Auto-login if present - Demo mode
-    (function(){
-      const k = localStorage.getItem('yuv_userKey');
-      
-      if(k && store.users[k]){
-        const user = store.users[k];
-        document.getElementById('readerStatus').textContent = 'Logged in as ' + (user.name || 'User');
-        renderModules(user.paid ? 1 : 0);
-        
-        if (user.paid) {
-          console.log('User has paid access');
-        } else {
-          console.log('User needs to complete payment');
-          // Check if user is returning from payment (demo mode)
-          checkPaymentReturn();
-        }
-      }
-    })();
-    
-    // Check if user is returning from payment (demo mode)
-    function checkPaymentReturn() {
-      // In demo mode, we'll simulate payment success after a delay
-      // In real scenario, this would be handled by webhook or redirect parameters
-      setTimeout(() => {
-        const userKey = localStorage.getItem('yuv_userKey');
-        if (userKey && store.users[userKey] && !store.users[userKey].paid) {
-          // Simulate payment success for demo
-          simulatePaymentSuccess();
-        }
-      }, 2000); // Wait 2 seconds to simulate payment processing
-    }
-    
-    // Reset payment status for testing
-    function resetPaymentStatus() {
-      const userKey = localStorage.getItem('yuv_userKey');
-      if (userKey && store.users[userKey]) {
-        store.users[userKey].paid = false;
-        document.getElementById('readerStatus').textContent = 'Payment status reset. Please complete payment.';
-        renderModules(0);
-        alert('Payment status has been reset. You can now test the payment flow again.');
-      }
-    }
+
   </script>
 </body>
 </html>
