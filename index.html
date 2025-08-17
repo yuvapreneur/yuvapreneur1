@@ -313,7 +313,7 @@
     },1000);
 
     // Payment Link Configuration
-    const PAYMENT_LINK = 'https://rzp.io/rzp/WkSmxWB5';
+    const PAYMENT_LINK = 'https://pages.razorpay.com/pl_R6SoyQDHXyNFqW/view';
     
 
     
@@ -342,8 +342,9 @@
         // Confirm payment
         if (confirm('You will be redirected to complete payment of ₹299. Continue?')) {
           try {
-            // Redirect to payment link
-            window.location.href = PAYMENT_LINK;
+            // Redirect to payment link with success URL parameter
+            const paymentUrl = PAYMENT_LINK + '?redirect_to=' + encodeURIComponent('https://www.yuvapreneur.in/success.html');
+            window.location.href = paymentUrl;
           } catch (error) {
             console.error('Error redirecting to payment:', error);
             // Fallback: open in new tab
@@ -390,8 +391,9 @@
         // Confirm bonus payment
         if (confirm(`You will be redirected to complete payment of ₹${amount} for the bonus. Continue?`)) {
           try {
-            // Redirect to payment link
-            window.location.href = PAYMENT_LINK;
+            // Redirect to payment link with success URL parameter
+            const paymentUrl = PAYMENT_LINK + '?redirect_to=' + encodeURIComponent('https://www.yuvapreneur.in/success.html');
+            window.location.href = paymentUrl;
           } catch (error) {
             console.error('Error redirecting to payment:', error);
             // Fallback: open in new tab
