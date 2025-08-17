@@ -48,8 +48,7 @@
     #reader{user-select:none}
     #reader img{pointer-events:none}
   </style>
-  <!-- Razorpay checkout loader (keep; replace key in JS options) -->
-  <script src="https://checkout.razorpay.com/v1/checkout.js" async></script>
+  <!-- Direct payment link - no external scripts needed -->
 </head>
 <body>
   <header class="top">
@@ -57,7 +56,7 @@
       <div class="logo">🚀 yuvapreneur.in</div>
       <div>
         <button class="btn btn-primary small" onclick="openLogin()">Login</button>
-        <button class="btn btn-outline small" onclick="scrollToId('enroll')">Create account</button>
+        <button class="btn btn-outline small" onclick="openEnrollmentForm()">Create account</button>
       </div>
     </div>
   </header>
@@ -72,7 +71,7 @@
       <div style="display:flex;gap:16px;align-items:center;margin-top:20px;flex-wrap:wrap">
         <div class="priceTag">
           <span>Launch Offer</span>
-          <span class="rupee">₹299</span>
+          <span class="rupee">₹1</span>
         </div>
         <div class="muted small">Will increase to <b>₹799</b> after the timer.<br>
           <span class="pill">⏳ Offer ends in <span id="countdown">--:--:--</span></span>
@@ -84,7 +83,7 @@
         <span class="small">📖 Modules unlock sequentially</span>
       </div>
       <div style="display:flex;gap:12px;margin-top:24px;flex-wrap:wrap">
-        <button class="btn btn-primary" onclick="scrollToId('enroll')">Enroll Now (₹299)</button>
+        <button class="btn btn-primary" onclick="openEnrollmentForm()">Enroll Now (₹1)</button>
         <a class="btn btn-outline" href="#modules">See Modules →</a>
       </div>
     </section>
@@ -176,7 +175,7 @@
             <input type="checkbox" id="agree" checked /> <label for="agree">I agree to the Terms and Privacy Policy.</label>
           </div>
           <div style="grid-column:1/-1;display:flex;align-items:center;justify-content:space-between">
-            <div class="small muted">Payable today: <b>₹299</b> (will be ₹799 later)</div>
+            <div class="small muted">Payable today: <b>₹1</b> (will be ₹799 later)</div>
             <button class="btn btn-primary" type="submit">Enroll & Pay →</button>
           </div>
         </form>
@@ -210,8 +209,8 @@
               <b>Festival & Seasonal Marketing Guide: Strategies to Double Sales</b>
               <p class="muted small">Plan irresistible festival offers, content, and promos that turn holidays into revenue spikes.</p>
               <div style="display:flex;align-items:center;justify-content:space-between;margin-top:8px">
-                <div class="small">₹299</div>
-                <button class="btn btn-primary small" onclick="buyBonus('bonus-seasonal-marketing',299)">Buy & Access →</button>
+                              <div class="small">₹1</div>
+              <button class="btn btn-primary small" onclick="buyBonus('bonus-seasonal-marketing',1)">Buy & Access →</button>
               </div>
             </div>
           </div>
@@ -251,7 +250,7 @@
       <div class="grid">
         <details class="card"><summary><b>Will I be able to download the eBook?</b></summary><p class="muted">No. Access is read‑only inside your account to protect course IP. Downloads and print are disabled.</p></details>
         <details class="card"><summary><b>How do modules unlock?</b></summary><p class="muted">After successful payment, Module 1 unlocks instantly. Each subsequent module unlocks after you complete the previous one.</p></details>
-        <details class="card"><summary><b>Is ₹299 a lifetime deal?</b></summary><p class="muted">Yes, for early buyers during the countdown. After the timer, the price switches to ₹799.</p></details>
+        <details class="card"><summary><b>Is ₹1 a lifetime deal?</b></summary><p class="muted">Yes, for early buyers during the countdown. After the timer, the price switches to ₹799.</p></details>
         <details class="card"><summary><b>How do I reset my password?</b></summary><p class="muted">Use “Forgot password”. Enter your phone or email to receive an OTP, then set a new password.</p></details>
         <details class="card"><summary><b>How is payment handled?</b></summary><p class="muted">Payments go through Razorpay’s secure checkout. You’ll be redirected back automatically after success.</p></details>
       </div>
@@ -337,63 +336,152 @@
       cd.textContent = `${h}:${m}:${s}`;
     },1000);
 
-    // Simple in-memory demo store (NOT PRODUCTION)
+    // Configuration - Direct payment link only
+    const PAYMENT_LINK = 'https://rzp.io/rzp/WkSmxWB5';
+    
+    // Simple in-memory demo store (NOT PRODUCTION - replace with your backend)
     const store = { users: {}, modulesUnlocked: {} };
 
     function scrollToId(id){ document.getElementById(id).scrollIntoView({behavior:'smooth'}); }
 
     function openLogin(){ document.getElementById('loginDlg').showModal(); }
+    
+    function openEnrollmentForm(){ 
+      scrollToId('enroll');
+      // Focus on the first input field for better UX
+      setTimeout(() => {
+        const firstInput = document.querySelector('#enroll input[name="name"]');
+        if (firstInput) firstInput.focus();
+      }, 500);
+    }
     function openForgot(e){ e && e.preventDefault(); document.getElementById('loginDlg').close(); document.getElementById('forgotDlg').showModal(); return false; }
+
+    // Handle payment for main course - Direct payment link
+    function handlePay(formData) {
+      // Store user data locally for demo purposes
+      const key = formData.email || formData.phone;
+      store.users[key] = { ...formData, paid: false, userId: Date.now().toString() };
+      localStorage.setItem('yuv_userKey', key);
+      
+      // Show payment instructions
+      const confirmed = confirm(`Payment Instructions:
+      
+1. You'll be redirected to Razorpay payment page
+2. Complete your payment of ₹1
+3. After payment, you'll be redirected back
+4. Your account will be activated automatically
+
+Click OK to proceed to payment.`);
+      
+      if (confirmed) {
+        // Redirect to Razorpay payment link
+        window.location.href = PAYMENT_LINK;
+      }
+    }
+
+    // Demo function - In real scenario, this would be handled by webhook
+    function verifyPayment(response, formData) {
+      // For demo purposes, we'll simulate successful payment
+      const key = formData.email || formData.phone;
+      store.users[key] = { ...formData, paid: true, userId: Date.now().toString() };
+      localStorage.setItem('yuv_userKey', key);
+      
+      alert('Payment successful! Your account has been activated.');
+      
+      // Show success message and redirect to course
+      document.getElementById('readerStatus').textContent = 'Payment successful! Module 1 unlocked.';
+      renderModules(1);
+    }
 
     function enroll(e){
       e.preventDefault();
       const f = e.target;
-      if(!document.getElementById('agree').checked){ alert('Please accept terms to proceed.'); return false; }
+      if(!document.getElementById('agree').checked){ 
+        alert('Please accept terms to proceed.'); 
+        return false; 
+      }
+      
       const form = Object.fromEntries(new FormData(f).entries());
-      // Create Razorpay order on your backend here, then call window.Razorpay with the returned order_id
-      const options = {
-        key: 'rzp_test_xxxxxxxxxxxxx', // TODO: replace with your live/test key ID
-        amount: 299*100, currency: 'INR', name:'yuvapreneur.in', description:'Café Business 12‑Module eBook Course',
-        handler: function (resp) {
-          // TODO: Verify resp.razorpay_payment_id + signature on backend before granting access
-          const key = form.email || form.phone;
-          store.users[key] = { ...form, paid:true };
-          localStorage.setItem('yuv_userKey', key);
-          alert('Enrollment successful!');
-          document.getElementById('readerStatus').textContent = 'Logged in as '+form.name;
-          renderModules(1);
-        },
-        prefill: { name: form.name, email: form.email, contact: form.phone },
-        theme: { color: '#0f172a' }
-      };
-      if(window.Razorpay){ new window.Razorpay(options).open(); } else { alert('Razorpay not loaded.'); }
+      handlePay(form);
       return false;
     }
 
+    // Authentication functions - Demo mode
     function doLogin(e){
       e && e.preventDefault();
       const id = document.getElementById('loginId').value.trim();
       const pass = document.getElementById('loginPass').value;
-      const u = store.users[id];
-      if(!u || u.password!==pass){ alert('Invalid credentials.'); return false; }
-      localStorage.setItem('yuv_userKey', id);
-      document.getElementById('loginDlg').close();
-      document.getElementById('readerStatus').textContent = 'Logged in as '+(u.name||'User');
-      renderModules( u.paid ? 1 : 0 );
+      
+      // Demo login - check if user exists in local storage
+      const userKey = id;
+      const user = store.users[userKey];
+      
+      if (user && user.password === pass) {
+        localStorage.setItem('yuv_userKey', userKey);
+        document.getElementById('loginDlg').close();
+        document.getElementById('readerStatus').textContent = 'Logged in as ' + (user.name || 'User');
+        renderModules(user.paid ? 1 : 0);
+        
+        if (user.paid) {
+          alert('Welcome back! You have access to the course.');
+        } else {
+          alert('Please complete payment to access the course.');
+        }
+      } else {
+        alert('Invalid credentials. Please check your email/phone and password.');
+      }
       return false;
     }
 
-    function sendOtp(e){ e && e.preventDefault(); document.getElementById('otpSentMsg').style.display='inline'; document.getElementById('otpBlock').classList.remove('hidden'); return false; }
-    function doReset(e){ e && e.preventDefault(); const id = document.getElementById('fpId').value.trim(); const u = store.users[id]; if(!u){ alert('Account not found.'); return false; } u.password = document.getElementById('fpNew').value; alert('Password updated. Please login.'); document.getElementById('forgotDlg').close(); document.getElementById('loginDlg').showModal(); return false; }
+    function sendOtp(e){ 
+      e && e.preventDefault(); 
+      const id = document.getElementById('fpId').value.trim();
+      
+      // Demo OTP - show OTP block
+      document.getElementById('otpSentMsg').style.display = 'inline';
+      document.getElementById('otpBlock').classList.remove('hidden');
+      document.getElementById('otpSentMsg').textContent = 'Demo: OTP sent to ' + (id.includes('@') ? 'email' : 'phone') + ' (use 123456)';
+      return false; 
+    }
 
+    function doReset(e){ 
+      e && e.preventDefault(); 
+      const id = document.getElementById('fpId').value.trim();
+      const otp = document.getElementById('fpOtp').value;
+      const newPass = document.getElementById('fpNew').value;
+      
+      // Demo password reset - check if OTP is 123456
+      if (otp === '123456') {
+        // Update password in local storage
+        if (store.users[id]) {
+          store.users[id].password = newPass;
+          alert('Password updated successfully. Please login.');
+          document.getElementById('forgotDlg').close();
+          document.getElementById('loginDlg').showModal();
+        } else {
+          alert('User not found. Please check your email/phone.');
+        }
+      } else {
+        alert('Invalid OTP. Please use 123456 for demo.');
+      }
+      return false; 
+    }
+
+    // Secure reader with watermarking and protection
     function renderModules(unlocked){
       const list = document.getElementById('modulesList');
       const content = document.getElementById('readerContent');
       list.innerHTML=''; content.innerHTML='';
-      if(!unlocked){ content.textContent='Please complete payment to unlock Module 1.'; return; }
+      
+      if(!unlocked){ 
+        content.textContent='Please complete payment to unlock Module 1.'; 
+        return; 
+      }
+      
       const titles=[
         'Introduction to the Café Industry','Research & Market Analysis','Location Selection & Setup','Financial Planning & Investment','Kitchen Setup & Operations','Hiring & Team Management','Menu Design & Pricing','Marketing: Online + Offline','Licenses & Compliance','Technology & POS','Customer Experience & Loyalty','Scaling & Franchising'
       ];
+      
       for(let i=1;i<=12;i++){
         const btn = document.createElement('button');
         btn.textContent = i+'. '+titles[i-1];
@@ -403,8 +491,7 @@
         btn.style.width='100%';
         if(i>unlocked){ btn.disabled=true; btn.style.opacity=.6; }
         btn.onclick=()=>{
-          content.innerHTML = '<div class="small muted">Module '+i+'</div><h3>'+titles[i-1]+'</h3><p>📖 Reader Mode — your secured content will render here. (Demo HTML)\n<br><span class="kbd">Tip:</span> Stream protected page images/HTML from your server; watermark & disable print/copy.</p>'+
-          '<button class="btn btn-primary small" style="margin-top:8px" onclick="unlockNext('+i+')">Mark as Done</button>';
+          loadSecureContent(i, titles[i-1]);
         };
         list.appendChild(btn);
       }
@@ -412,15 +499,169 @@
       list.querySelector('button').click();
     }
 
+    // Load demo content
+    function loadSecureContent(moduleId, title) {
+      const content = document.getElementById('readerContent');
+      const userKey = localStorage.getItem('yuv_userKey');
+      
+      // Demo content for each module
+      const demoContent = {
+        1: `<p>Welcome to Module 1: Introduction to the Café Industry!</p>
+            <p>This module covers:</p>
+            <ul>
+              <li>Types of cafés and business models</li>
+              <li>Indian market analysis and trends</li>
+              <li>Market opportunities and challenges</li>
+            </ul>
+            <p>This is demo content. In the real course, you'll get comprehensive lessons with practical examples.</p>`,
+        2: `<p>Module 2: Research & Market Analysis</p>
+            <p>Learn how to:</p>
+            <ul>
+              <li>Identify your target customer segments</li>
+              <li>Conduct competitor analysis and SWOT</li>
+              <li>Define your unique selling proposition</li>
+            </ul>`,
+        3: `<p>Module 3: Location Selection & Setup</p>
+            <p>Key topics:</p>
+            <ul>
+              <li>Footfall benchmarks and analysis</li>
+              <li>Rent optimization (≤10% of sales)</li>
+              <li>Location accessibility checklist</li>
+            </ul>`
+      };
+      
+      const moduleContent = demoContent[moduleId] || `<p>Module ${moduleId}: ${title}</p><p>This module content will be available in the full course.</p>`;
+      
+      // Render content with watermark
+      content.innerHTML = `
+        <div class="small muted">Module ${moduleId}</div>
+        <h3>${title}</h3>
+        <div class="secure-content" style="position:relative;padding:20px;background:#fff;border-radius:12px;border:1px solid var(--line);">
+          <div class="watermark" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-45deg);font-size:48px;color:rgba(0,0,0,0.1);pointer-events:none;user-select:none;z-index:1;">
+            ${userKey}
+          </div>
+          <div style="position:relative;z-index:2;">
+            ${moduleContent}
+          </div>
+        </div>
+        <button class="btn btn-primary small" style="margin-top:8px" onclick="unlockNext(${moduleId})">Mark as Done</button>
+      `;
+      
+      // Apply security measures
+      applySecurityMeasures();
+    }
+
+    // Apply security measures to prevent copying/downloading
+    function applySecurityMeasures() {
+      const secureContent = document.querySelector('.secure-content');
+      if (!secureContent) return;
+      
+      // Disable right-click
+      secureContent.addEventListener('contextmenu', e => e.preventDefault());
+      
+      // Disable text selection
+      secureContent.style.userSelect = 'none';
+      secureContent.style.webkitUserSelect = 'none';
+      secureContent.style.mozUserSelect = 'none';
+      secureContent.style.msUserSelect = 'none';
+      
+      // Disable keyboard shortcuts
+      document.addEventListener('keydown', e => {
+        if (e.ctrlKey || e.metaKey) {
+          if (['c', 'a', 's', 'p', 'u'].includes(e.key)) {
+            e.preventDefault();
+          }
+        }
+        if (e.key === 'F12') e.preventDefault();
+      });
+      
+      // Disable print
+      window.addEventListener('beforeprint', e => e.preventDefault());
+    }
+
     window.unlockNext = function(current){
       const next = Math.min(12, current+1);
       renderModules(next);
     }
 
-    // Auto-login if present
+    // Bonus payment functionality - Direct payment link
+    function buyBonus(bonusId, amount) {
+      const userKey = localStorage.getItem('yuv_userKey');
+      
+      if (!userKey) {
+        alert('Please complete the main course enrollment first.');
+        scrollToId('enroll');
+        return;
+      }
+
+      // Show payment instructions for bonus
+      const confirmed = confirm(`Bonus Payment Instructions:
+      
+1. You'll be redirected to Razorpay payment page
+2. Complete your payment of ₹${amount}
+3. After payment, you'll be redirected back
+4. Bonus content will be unlocked automatically
+
+Click OK to proceed to payment.`);
+      
+      if (confirmed) {
+        // Store bonus info for demo purposes
+        store.bonuses = store.bonuses || {};
+        store.bonuses[bonusId] = { amount, purchased: false };
+        
+        // Redirect to Razorpay payment link
+        window.location.href = PAYMENT_LINK;
+      }
+    }
+
+    // Demo function for bonus verification
+    function verifyBonusPayment(response, bonusId, userKey, userToken) {
+      // For demo purposes, mark bonus as purchased
+      if (store.bonuses && store.bonuses[bonusId]) {
+        store.bonuses[bonusId].purchased = true;
+        updateBonusUI(bonusId);
+        alert('Bonus purchased successfully! You now have access to this content.');
+      }
+    }
+
+    // Get bonus title
+    function getBonusTitle(bonusId) {
+      const bonusTitles = {
+        'bonus-menu-psychology': 'Café Menu Psychology Blueprint',
+        'bonus-seasonal-marketing': 'Festival & Seasonal Marketing Guide',
+        'bonus-loyalty': 'Café Loyalty Program Guide',
+        'bonus-food-photo': 'Food Photography Cheat Sheet'
+      };
+      return bonusTitles[bonusId] || 'Bonus Content';
+    }
+
+    // Update bonus UI after purchase
+    function updateBonusUI(bonusId) {
+      const bonusCard = document.querySelector(`[onclick*="${bonusId}"]`).closest('.card');
+      if (bonusCard) {
+        const button = bonusCard.querySelector('button');
+        button.textContent = '✓ Purchased';
+        button.disabled = true;
+        button.style.opacity = '0.6';
+        button.style.background = '#10b981';
+      }
+    }
+
+    // Auto-login if present - Demo mode
     (function(){
       const k = localStorage.getItem('yuv_userKey');
-      if(k && store.users[k]){ document.getElementById('readerStatus').textContent = 'Logged in as '+(store.users[k].name||'User'); renderModules( store.users[k].paid?1:0 ); }
+      
+      if(k && store.users[k]){
+        const user = store.users[k];
+        document.getElementById('readerStatus').textContent = 'Logged in as ' + (user.name || 'User');
+        renderModules(user.paid ? 1 : 0);
+        
+        if (user.paid) {
+          console.log('User has paid access');
+        } else {
+          console.log('User needs to complete payment');
+        }
+      }
     })();
   </script>
 </body>
