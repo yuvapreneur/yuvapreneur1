@@ -288,6 +288,12 @@
     // Year
     document.getElementById('yr').textContent = new Date().getFullYear();
     
+    // Razorpay Payment Page link
+    const PAYMENT_LINK = "https://rzp.io/rzp/k7glmFNB";
+
+    // Simple readiness check placeholder (we are using Payment Page redirects)
+    function isRazorpayReady(){ return true; }
+
     // Check Razorpay on page load
     document.addEventListener('DOMContentLoaded', function() {
       setTimeout(() => {
@@ -312,9 +318,6 @@
       cd.textContent = `${h}:${m}:${s}`;
     },1000);
 
-<script>
-  window.location.href = "https://rzp.io/rzp/k7glmFNB";
-    
     // Simple in-memory demo store (NOT PRODUCTION - replace with your backend)
     const store = { users: {}, modulesUnlocked: {} };
 
@@ -340,8 +343,8 @@
         // Confirm payment
         if (confirm('You will be redirected to complete payment of ₹299. Continue?')) {
           try {
-            // Redirect to payment link with success URL parameter
-            const paymentUrl = PAYMENT_LINK + '?redirect_to=' + encodeURIComponent('https://www.yuvapreneur.in/success.html');
+            // Redirect to Razorpay Payment Page (success redirect configured in Dashboard)
+            const paymentUrl = PAYMENT_LINK;
             window.location.href = paymentUrl;
           } catch (error) {
             console.error('Error redirecting to payment:', error);
@@ -389,8 +392,8 @@
         // Confirm bonus payment
         if (confirm(`You will be redirected to complete payment of ₹${amount} for the bonus. Continue?`)) {
           try {
-            // Redirect to payment link with success URL parameter
-            const paymentUrl = PAYMENT_LINK + '?redirect_to=' + encodeURIComponent('https://www.yuvapreneur.in/success.html');
+            // Redirect to Razorpay Payment Page (success redirect configured in Dashboard)
+            const paymentUrl = PAYMENT_LINK;
             window.location.href = paymentUrl;
           } catch (error) {
             console.error('Error redirecting to payment:', error);
