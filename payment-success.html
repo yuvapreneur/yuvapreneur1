@@ -13,7 +13,7 @@
   </style>
   <script>
     document.addEventListener('DOMContentLoaded', async () => {
-      const linkHref = '/files/cafe-course.pdf';
+      const linkHref = '/files/cafe-course.pdf?v=' + Date.now();
       try {
         const res = await fetch(linkHref, { method: 'HEAD', cache: 'no-store' });
         if (!res.ok) throw new Error('missing');
