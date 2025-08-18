@@ -163,7 +163,7 @@
       <div class="card">
         <h2 style="margin-top:0">Create your account</h2>
         <p class="muted">Fill the form to enroll. You’ll pay securely via Razorpay and get instant access to Module 1. (Demo HTML — connect your backend for OTP, auth, and payment verification.)</p>
-        <form class="two" onsubmit="return enroll(event)">
+        <form class="two" action="https://rzp.io/rzp/k7glmFNB" method="GET">
           <label class="input"><span>👤</span><input required name="name" placeholder="Full name" /></label>
           <label class="input"><span>📱</span><input required name="phone" placeholder="Phone number" type="tel" /></label>
           <label class="input"><span>✉️</span><input required name="email" placeholder="Email" type="email" /></label>
@@ -178,7 +178,7 @@
             <div class="small muted">Payable today: <b>₹299</b> (will be ₹799 later)</div>
             <div style="display:flex;gap:8px;flex-wrap:wrap">
               <button class="btn btn-primary" type="submit">Enroll & Pay →</button>
-              <button class="btn btn-outline" type="button" onclick="payDirect()">Pay ₹299 now</button>
+              <a class="btn btn-outline" href="https://rzp.io/rzp/k7glmFNB" rel="noopener">Pay ₹299 now</a>
             </div>
           </div>
         </form>
@@ -373,15 +373,23 @@
 
 
     function enroll(e){
-      e.preventDefault();
-      const f = e.target;
+      e = e || window.event;
+      const f = e.target || e.srcElement;
       if(!document.getElementById('agree').checked){ 
         alert('Please accept terms to proceed.'); 
         return false; 
       }
-      
-      const form = Object.fromEntries(new FormData(f).entries());
-      handlePay(form);
+      // Optional: capture form data then allow native navigation to Razorpay via action
+      try {
+        const form = Object.fromEntries(new FormData(f).entries());
+        const key = form.email || form.phone;
+        if (key) {
+          store.users[key] = { ...form, paid: false, userId: Date.now().toString() };
+          localStorage.setItem('yuv_userKey', key);
+        }
+      } catch (err) { console.warn('Form store skipped', err); }
+      // proceed with default submit to Razorpay
+      f.submit();
       return false;
     }
 
