@@ -18,7 +18,7 @@ if (hash_equals($expectedSignature, $receivedSignature)) {
             $to = $email;
             $subject = 'Your Course PDF - Payment Successful';
             $message = "Hi, thank you for your payment! Please find your course PDF attached.";
-            $from = 'abhijeetwankhede61@gmail.com';
+            $from = 'support@yuvapreneur.in';
 
             $filePath = __DIR__ . '/../files/START.pdf.pdf';
             if (file_exists($filePath)) {
