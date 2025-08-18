@@ -411,6 +411,8 @@
         if (path.endsWith('/payment-success') || url.searchParams.get('payment') === 'success') {
 
           document.getElementById('successOverlay')?.classList.add('show');
+          // Auto-download redirect
+          setTimeout(function(){ window.location.href = '/files/cafe-course.pdf'; }, 800);
         }
       } catch (e) { /* noop */ }
     });
