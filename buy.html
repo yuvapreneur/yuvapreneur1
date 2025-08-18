@@ -26,9 +26,9 @@
 
     <!-- Order details (static demo; payment handled by Razorpay Payment Page) -->
     <div id="order-block">
-      <p><strong>Price:</strong> ₹<span id="amount-view">499</span></p>
+      <p><strong>Price:</strong> ₹<span id="amount-view">299</span></p>
       <div class="row">
-        <button id="pay-btn" class="btn-primary">Pay ₹499</button>
+        <button id="pay-btn" class="btn-primary">Pay ₹299</button>
         <a class="btn-ghost" id="direct-link" href="https://rzp.io/rzp/rD8ThUeD" target="_blank" rel="noopener">Open Payment Page</a>
       </div>
       <p class="muted">On success you’ll be redirected back and see the download link.</p>
@@ -48,7 +48,7 @@
 
   <script>
     const PAYMENT_PAGE = 'https://rzp.io/rzp/rD8ThUeD';
-    const AMOUNT_INR = 499;
+    const AMOUNT_INR = 299;
     document.getElementById('amount-view').textContent = AMOUNT_INR;
 
     function showSuccess(receiptId){
