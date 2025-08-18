@@ -44,6 +44,12 @@
     .priceTag{display:flex;align-items:center;gap:12px;background:#0f172a;color:#fff;border-radius:16px;padding:12px 16px}
     .rupee{font-weight:700;font-size:22px}
     .kbd{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;font-size:12px;background:#f1f5f9;border:1px solid var(--line);border-bottom-width:2px;border-radius:6px;padding:2px 6px}
+    /* Success overlay */
+    .overlay{position:fixed;inset:0;background:rgba(15,23,42,.6);backdrop-filter:saturate(180%) blur(4px);display:none;align-items:center;justify-content:center;z-index:50}
+    .overlay .panel{background:#fff;border:1px solid var(--line);border-radius:16px;max-width:560px;width:92%;padding:24px;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,.12)}
+    .overlay .panel h2{margin:0 0 8px}
+    .overlay .panel p{margin:6px 0}
+    .overlay.show{display:flex}
     /* Reader hardening hints */
     #reader{user-select:none}
     #reader img{pointer-events:none}
@@ -62,6 +68,16 @@
   </header>
 
   <main>
+    <!-- Payment Success Overlay -->
+    <div id="successOverlay" class="overlay" role="dialog" aria-modal="true" aria-labelledby="successTitle">
+      <div class="panel">
+        <h2 id="successTitle">🎉 Payment Successful</h2>
+        <p class="muted">Thank you for your purchase. Your download is ready.</p>
+        <p style="margin-top:10px"><a class="btn btn-primary" href="/files/START.pdf.pdf" target="_blank" rel="noopener">Download PDF</a></p>
+        <p class="small muted" style="margin-top:8px">We’ve also emailed you the PDF (check spam/promotions if not found).</p>
+        <p style="margin-top:12px"><button class="btn btn-outline" onclick="closeSuccess()">Close</button></p>
+      </div>
+    </div>
     <!-- HERO -->
     <section class="hero container" style="padding:48px 0 24px">
       <span class="badge">Complete Café Business eBook Course</span>
@@ -305,6 +321,15 @@
           console.warn('⚠️ Razorpay is not ready yet');
         }
       }, 1000);
+
+      // Show success overlay if redirected back from Razorpay or on /payment-success
+      try {
+        const url = new URL(window.location.href);
+        const path = url.pathname.replace(/\/$/, '');
+        if (path.endsWith('/payment-success') || url.searchParams.get('payment') === 'success') {
+          document.getElementById('successOverlay')?.classList.add('show');
+        }
+      } catch (e) { /* noop */ }
     });
 
     // Countdown (48h)
@@ -332,6 +357,16 @@
         const firstInput = document.querySelector('#enroll input[name="name"]');
         if (firstInput) firstInput.focus();
       }, 500);
+    }
+
+    function closeSuccess(){
+      document.getElementById('successOverlay')?.classList.remove('show');
+      // Clean up query param if present
+      if (window.history && history.replaceState) {
+        const url = new URL(window.location.href);
+        url.searchParams.delete('payment');
+        history.replaceState({}, '', url.toString());
+      }
     }
 
     // Handle payment for main course - Direct payment link
