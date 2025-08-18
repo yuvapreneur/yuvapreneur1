@@ -176,7 +176,10 @@
           </div>
           <div style="grid-column:1/-1;display:flex;align-items:center;justify-content:space-between">
             <div class="small muted">Payable today: <b>₹299</b> (will be ₹799 later)</div>
-            <button class="btn btn-primary" type="submit">Enroll & Pay →</button>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <button class="btn btn-primary" type="submit">Enroll & Pay →</button>
+              <button class="btn btn-outline" type="button" onclick="payDirect()">Pay ₹299 now</button>
+            </div>
           </div>
         </form>
       </div>
@@ -353,6 +356,17 @@
       } catch (error) {
         console.error('Payment error:', error);
         alert('There was an issue with the payment setup. Please try again.');
+      }
+    }
+
+    // Pay without form validation
+    function payDirect(){
+      try {
+        const paymentUrl = PAYMENT_LINK;
+        window.location.href = paymentUrl;
+      } catch (error) {
+        console.error('Error redirecting to payment:', error);
+        window.open(PAYMENT_LINK, '_blank');
       }
     }
 
