@@ -6,27 +6,38 @@
   <title>Payment Successful</title>
   <style>
     body { font-family: Arial, sans-serif; text-align: center; margin-top: 100px; }
-    h1 { color: green; }
-    .btn { display: inline-block; margin-top: 20px; padding: 12px 24px; background-color: #28a745; color: white; text-decoration: none; border-radius: 5px; font-size: 16px; }
-    p { color: #334155; }
+    h1 { color: #16a34a; margin: 0 0 8px; }
+    .btn { display: inline-block; margin-top: 20px; padding: 12px 24px; background-color: #111; color: white; text-decoration: none; border-radius: 8px; font-size: 16px; }
+    p { color: #334155; margin: 6px 0; }
+    .err { color: #b00020; margin-top: 12px; }
   </style>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const linkHref = '/files/cafe-course.pdf';
+      try {
+        const res = await fetch(linkHref, { method: 'HEAD', cache: 'no-store' });
+        if (!res.ok) throw new Error('missing');
+        const a = document.getElementById('dl');
+        a.href = linkHref;
+        a.setAttribute('download', 'cafe-course.pdf');
+        // Optional auto-download
+        setTimeout(() => { a.click(); }, 600);
+      } catch {
+        const err = document.getElementById('err');
+        err.textContent = 'File not found, please contact support@yuvapreneur.in';
+        document.getElementById('dl').classList.add('disabled');
+        document.getElementById('dl').style.opacity = '0.6';
+        document.getElementById('dl').removeAttribute('download');
+        document.getElementById('dl').href = '#';
+      }
+    });
+  </script>
 </head>
 <body>
-  <h1>🎉 Congratulations!</h1>
-  <p>Your payment was successful.</p>
-  <p>Click below to download your course PDF:</p>
-  <a href="/download" class="btn" target="_blank" rel="noopener">Download PDF</a>
-  <script>
-    window.onload = function(){
-      try {
-        var u = new URL(window.location.href);
-        var t = u.searchParams.get('token');
-        var link = '/download' + (t ? ('?token=' + encodeURIComponent(t)) : '');
-        setTimeout(function(){ window.location.href = link; }, 600);
-      } catch(_){ setTimeout(function(){ window.location.href = '/download'; }, 600); }
-    };
-  </script>
-  <p style="margin-top:24px;font-size:14px;color:#64748b">If the download doesn’t open, check your email for the PDF attachment.</p>
+  <h1>✅ Payment Successful</h1>
+  <p>Thank you for your payment. Click below to download your PDF.</p>
+  <p><a id="dl" class="btn" href="/files/cafe-course.pdf" download>Download PDF</a></p>
+  <p id="err" class="err" aria-live="polite"></p>
 </body>
 </html>
 
