@@ -6,7 +6,7 @@ $input = @file_get_contents('php://input');
 $event = json_decode($input, true);
 
 // Verify Razorpay signature
-$secret = 'YOUR_RAZORPAY_WEBHOOK_SECRET'; // TODO: set this in your environment
+$secret = getenv('RAZORPAY_WEBHOOK_SECRET') ?: 'YOUR_RAZORPAY_WEBHOOK_SECRET';
 $receivedSignature = isset($_SERVER['HTTP_X_RAZORPAY_SIGNATURE']) ? $_SERVER['HTTP_X_RAZORPAY_SIGNATURE'] : '';
 $expectedSignature = hash_hmac('sha256', $input, $secret);
 
@@ -18,7 +18,7 @@ if (hash_equals($expectedSignature, $receivedSignature)) {
             $to = $email;
             $subject = 'Your Course PDF - Payment Successful';
             $message = "Hi, thank you for your payment! Please find your course PDF attached.";
-            $from = 'support@yuvapreneur.in';
+            $from = getenv('MAIL_FROM') ?: 'support@yuvapreneur.in';
 
             $filePath = __DIR__ . '/../files/START.pdf.pdf';
             if (file_exists($filePath)) {
