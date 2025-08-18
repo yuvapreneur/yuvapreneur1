@@ -326,7 +326,18 @@
       try {
         const url = new URL(window.location.href);
         const path = url.pathname.replace(/\/$/, '');
-        if (path.endsWith('/payment-success') || url.searchParams.get('payment') === 'success') {
+        const hasRazorpayParams = (
+          url.searchParams.has('payment_id') ||
+          url.searchParams.has('razorpay_payment_id') ||
+          url.searchParams.has('razorpay_payment_link_id') ||
+          url.searchParams.get('status') === 'paid'
+        );
+        if (
+          path.endsWith('/payment-success') ||
+          url.searchParams.get('payment') === 'success' ||
+          hasRazorpayParams ||
+          (url.hash && /success/i.test(url.hash))
+        ) {
           document.getElementById('successOverlay')?.classList.add('show');
         }
       } catch (e) { /* noop */ }
