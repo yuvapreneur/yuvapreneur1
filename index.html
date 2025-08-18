@@ -340,17 +340,14 @@
         store.users[key] = { ...formData, paid: false, userId: Date.now().toString() };
         localStorage.setItem('yuv_userKey', key);
         
-        // Confirm payment
-        if (confirm('You will be redirected to complete payment of ₹299. Continue?')) {
-          try {
-            // Redirect to Razorpay Payment Page (success redirect configured in Dashboard)
-            const paymentUrl = PAYMENT_LINK;
-            window.location.href = paymentUrl;
-          } catch (error) {
-            console.error('Error redirecting to payment:', error);
-            // Fallback: open in new tab
-            window.open(PAYMENT_LINK, '_blank');
-          }
+        // Redirect to Razorpay Payment Page (success redirect configured in Dashboard)
+        try {
+          const paymentUrl = PAYMENT_LINK;
+          window.location.href = paymentUrl;
+        } catch (error) {
+          console.error('Error redirecting to payment:', error);
+          // Fallback: open in new tab
+          window.open(PAYMENT_LINK, '_blank');
         }
         
       } catch (error) {
@@ -389,17 +386,14 @@
       }
 
       try {
-        // Confirm bonus payment
-        if (confirm(`You will be redirected to complete payment of ₹${amount} for the bonus. Continue?`)) {
-          try {
-            // Redirect to Razorpay Payment Page (success redirect configured in Dashboard)
-            const paymentUrl = PAYMENT_LINK;
-            window.location.href = paymentUrl;
-          } catch (error) {
-            console.error('Error redirecting to payment:', error);
-            // Fallback: open in new tab
-            window.open(PAYMENT_LINK, '_blank');
-          }
+        // Redirect to Razorpay Payment Page (success redirect configured in Dashboard)
+        try {
+          const paymentUrl = PAYMENT_LINK;
+          window.location.href = paymentUrl;
+        } catch (error) {
+          console.error('Error redirecting to payment:', error);
+          // Fallback: open in new tab
+          window.open(PAYMENT_LINK, '_blank');
         }
         
       } catch (error) {
