@@ -5,36 +5,49 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>yuvapreneur.in — Start your Cafe Journey</title>
   <meta name="description" content="12 modules • 90+ lessons • Proven roadmap. Read‑only eBook course with secure account access and Razorpay checkout." />
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
   <style>
     :root{--bg:#f8fafc;--card:#ffffff;--ink:#0f172a;--muted:#475569;--line:#e2e8f0;--accent:#0f172a;--brand:#0f172a;--warn:#f59e0b}
+
     *{box-sizing:border-box}
     html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif}
+
     a{color:inherit}
     .container{max-width:1120px;margin:0 auto;padding:0 16px}
     .btn{display:inline-flex;align-items:center;gap:8px;border:none;border-radius:16px;padding:12px 18px;font-weight:600;cursor:pointer}
+
     .btn-primary{background:var(--brand);color:#fff}
     .btn-outline{background:#fff;border:1px solid var(--line);color:var(--ink)}
     .badge{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:#f1f5f9;color:#334155;font-size:12px;border-radius:999px;padding:6px 10px;text-transform:uppercase;letter-spacing:.06em}
+
     .grid{display:grid;gap:24px}
     .grid-2{grid-template-columns:1fr}
     @media(min-width:900px){.grid-2{grid-template-columns:1fr 1fr}}
     .card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:20px;box-shadow:0 1px 2px rgba(0,0,0,.03)}
+
     .hero h1{font-size:40px;line-height:1.1;margin:16px 0 0}
     @media(min-width:900px){.hero h1{font-size:52px}}
     .muted{color:var(--muted)}
     .pill{display:inline-flex;align-items:center;gap:8px;border-radius:999px;background:#fffbeb;border:1px solid #fde68a;padding:6px 10px;font-size:14px}
+
     ul.clean{list-style:none;margin:0;padding:0}
     .list{list-style:disc;padding-left:20px;color:#334155}
     .module{display:flex;gap:12px}
     .module-index{min-width:36px;height:36px;border-radius:12px;background:#f1f5f9;display:grid;place-items:center;font-weight:600}
+
     header.top{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.8);backdrop-filter:saturate(180%) blur(10px);border-bottom:1px solid var(--line)}
+
     header .row{display:flex;align-items:center;justify-content:space-between;padding:12px 0}
+
     .logo{font-weight:700;font-size:20px;display:flex;align-items:center;gap:8px}
+
     .hidden{display:none}
     .input{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:#fff}
+
     .input input{border:none;outline:0;width:100%;font-size:14px}
     .two{display:grid;grid-template-columns:1fr;gap:16px}
     @media(min-width:720px){.two{grid-template-columns:1fr 1fr}}
@@ -42,11 +55,15 @@
     .center{text-align:center}
     .footer{border-top:1px solid var(--line);margin-top:48px;padding:32px 0}
     .priceTag{display:flex;align-items:center;gap:12px;background:#0f172a;color:#fff;border-radius:16px;padding:12px 16px}
+
     .rupee{font-weight:700;font-size:22px}
     .kbd{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;font-size:12px;background:#f1f5f9;border:1px solid var(--line);border-bottom-width:2px;border-radius:6px;padding:2px 6px}
+
     /* Success overlay */
     .overlay{position:fixed;inset:0;background:rgba(15,23,42,.6);backdrop-filter:saturate(180%) blur(4px);display:none;align-items:center;justify-content:center;z-index:50}
+
     .overlay .panel{background:#fff;border:1px solid var(--line);border-radius:16px;max-width:560px;width:92%;padding:24px;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,.12)}
+
     .overlay .panel h2{margin:0 0 8px}
     .overlay .panel p{margin:6px 0}
     .overlay.show{display:flex}
@@ -63,6 +80,7 @@
       <div class="logo">🚀 www.yuvapreneur.in</div>
       <div>
         <button class="btn btn-outline small" onclick="openEnrollmentForm()">Enroll Now</button>
+
       </div>
     </div>
   </header>
@@ -70,12 +88,17 @@
   <main>
     <!-- Payment Success Overlay -->
     <div id="successOverlay" class="overlay" role="dialog" aria-modal="true" aria-labelledby="successTitle">
+
       <div class="panel">
         <h2 id="successTitle">🎉 Payment Successful</h2>
         <p class="muted">Thank you for your purchase. Your download is ready.</p>
+
         <p style="margin-top:10px"><a class="btn btn-primary" href="/files/START.pdf.pdf" target="_blank" rel="noopener">Download PDF</a></p>
+
         <p class="small muted" style="margin-top:8px">We’ve also emailed you the PDF (check spam/promotions if not found).</p>
+
         <p style="margin-top:12px"><button class="btn btn-outline" onclick="closeSuccess()">Close</button></p>
+
       </div>
     </div>
     <!-- HERO -->
@@ -84,13 +107,17 @@
       <h1>Start your Cafe Journey</h1>
       <p class="muted" style="margin-top:10px;font-size:18px">12 Modules • 90+ Lessons • Proven Roadmap</p>
 
+
       <div style="display:flex;gap:16px;align-items:center;margin-top:20px;flex-wrap:wrap">
+
         <div class="priceTag" role="button" tabindex="0" onclick="openEnrollmentForm()" onkeypress="if(event.key==='Enter'||event.key===' '){openEnrollmentForm();}" style="cursor:pointer">
+
           <span>Launch Offer</span>
           <span class="rupee">₹299</span>
         </div>
         <div class="muted small">Will increase to <b>₹799</b> after the timer.<br>
-          <span class="pill">⏳ Offer ends in <span id="countdown">--:--:--</span></span>
+
+          <span class="pill">⏳ Offer ends in <span id="countdown">--:--:--</span></span>                                                                        
         </div>
       </div>
       <div style="display:flex;gap:12px;margin-top:20px;flex-wrap:wrap">
@@ -101,6 +128,7 @@
       <div style="display:flex;gap:12px;margin-top:24px;flex-wrap:wrap">
         <button class="btn btn-primary" onclick="openEnrollmentForm()">Enroll Now (₹1)</button>
         <a class="btn btn-outline" href="#modules">See Modules →</a>
+        <a class="btn btn-outline" href="/buy.html">Buy & Download PDF →</a>
       </div>
     </section>
 
@@ -110,6 +138,7 @@
         <div class="card">
           <h3 style="margin:0 0 6px">Course Overview</h3>
           <ul class="clean muted" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px;font-size:14px">
+
             <li>✔ 90+ lessons</li>
             <li>✔ 2–4 hrs content</li>
             <li>✔ Checklists & templates</li>
@@ -137,39 +166,51 @@
         <!-- 12 modules -->
         <div class="card">
           <div class="module"><div class="module-index">1</div><div><b>Introduction to the Café Industry</b><ul class="list"><li>Types of cafés & models</li><li>Indian market & trends</li><li>Opportunities</li></ul></div></div>
+
         </div>
         <div class="card">
           <div class="module"><div class="module-index">2</div><div><b>Research & Market Analysis</b><ul class="list"><li>Customer segments</li><li>Competitor & SWOT</li><li>Define your USP</li></ul></div></div>
+
         </div>
         <div class="card">
           <div class="module"><div class="module-index">3</div><div><b>Location Selection & Setup</b><ul class="list"><li>Footfall benchmarks</li><li>Rent ≤ 10% of sales</li><li>Access checklist</li></ul></div></div>
+
         </div>
         <div class="card">
           <div class="module"><div class="module-index">4</div><div><b>Financial Planning & Investment</b><ul class="list"><li>Startup & monthly costs</li><li>Revenue math</li><li>Break-even</li></ul></div></div>
+
         </div>
         <div class="card">
           <div class="module"><div class="module-index">5</div><div><b>Kitchen Setup & Operations</b><ul class="list"><li>Layout & zones</li><li>Equipment essentials</li><li>Hygiene SOPs</li></ul></div></div>
+
         </div>
         <div class="card">
           <div class="module"><div class="module-index">6</div><div><b>Hiring & Team Management</b><ul class="list"><li>Key roles & salaries</li><li>Training plans</li><li>Shift design</li></ul></div></div>
+
         </div>
         <div class="card">
           <div class="module"><div class="module-index">7</div><div><b>Menu Design & Pricing</b><ul class="list"><li>Menu engineering</li><li>Psychological pricing</li><li>Combos & add‑ons</li></ul></div></div>
+
         </div>
         <div class="card">
           <div class="module"><div class="module-index">8</div><div><b>Marketing: Online + Offline</b><ul class="list"><li>Instagram & GMB</li><li>Local promos</li><li>Paid ads basics</li></ul></div></div>
+
         </div>
         <div class="card">
           <div class="module"><div class="module-index">9</div><div><b>Licenses & Compliance</b><ul class="list"><li>FSSAI, GST, Fire</li><li>Shop Act/UDYAM</li><li>Record keeping</li></ul></div></div>
+
         </div>
         <div class="card">
           <div class="module"><div class="module-index">10</div><div><b>Technology & POS</b><ul class="list"><li>Billing, KDS, inventory</li><li>Delivery integrations</li><li>Analytics dashboards</li></ul></div></div>
+
         </div>
         <div class="card">
           <div class="module"><div class="module-index">11</div><div><b>Customer Experience & Loyalty</b><ul class="list"><li>Service design</li><li>Feedback loops</li><li>Loyalty blueprint</li></ul></div></div>
+
         </div>
         <div class="card">
           <div class="module"><div class="module-index">12</div><div><b>Scaling & Franchising</b><ul class="list"><li>Unit economics</li><li>SOPs for replication</li><li>Franchise readiness</li></ul></div></div>
+
         </div>
       </div>
     </section>
@@ -179,21 +220,33 @@
       <div class="card">
         <h2 style="margin-top:0">Create your account</h2>
         <p class="muted">Fill the form to enroll. You’ll pay securely via Razorpay and get instant access to Module 1. (Demo HTML — connect your backend for OTP, auth, and payment verification.)</p>
+
         <form class="two">
           <label class="input"><span>👤</span><input required name="name" placeholder="Full name" /></label>
+
           <label class="input"><span>📱</span><input required name="phone" placeholder="Phone number" type="tel" /></label>
+
           <label class="input"><span>✉️</span><input required name="email" placeholder="Email" type="email" /></label>
+ 
           <label class="input"><span>🏢</span><input required name="profession" placeholder="Profession" /></label>
+
           <label class="input"><span>🏙️</span><input required name="city" placeholder="City" /></label>
+  
           <label class="input"><span>🗺️</span><input required name="state" placeholder="State" /></label>
-          <label class="input" style="grid-column:1/-1"><span>🔒</span><input required name="password" placeholder="Create password" type="password" /></label>
+  
+          <label class="input" style="grid-column:1/-1"><span>🔒</span><input required name="password" placeholder="Create password" type="password" /></label> 
           <div style="grid-column:1/-1;display:flex;align-items:center;gap:10px" class="small">
+
             <input type="checkbox" id="agree" checked /> <label for="agree">I agree to the Terms and Privacy Policy.</label>
+
           </div>
           <div style="grid-column:1/-1;display:flex;align-items:center;justify-content:space-between">
+
             <div class="small muted">Payable today: <b>₹299</b> (will be ₹799 later)</div>
+
             <div style="display:flex;gap:8px;flex-wrap:wrap">
-              <a class="btn btn-primary" href="https://rzp.io/rzp/k7glmFNB" target="_blank" rel="noopener">Pay ₹299 now</a>
+              <a class="btn btn-primary" href="https://rzp.io/rzp/rD8ThUeD" target="_blank" rel="noopener">Pay ₹299 now</a>
+
             </div>
           </div>
         </form>
@@ -203,8 +256,10 @@
     <!-- BONUSES -->
     <section class="container" style="padding:8px 0 32px">
       <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+
         <h2 style="margin:0">Exclusive Bonuses (Optional)</h2>
         <span class="small muted">Each unlocks in your account — read online only</span>
+
       </div>
       <div class="grid grid-2" style="margin-top:16px">
         <div class="card">
@@ -212,10 +267,14 @@
             <div class="module-index" aria-hidden>📄</div>
             <div>
               <b>Café Menu Psychology Blueprint: Increasing AOV & Satisfaction</b>
+
               <p class="muted small">Design a menu that nudges high‑margin choices and lifts your average order value without feeling salesy.</p>
+
               <div style="display:flex;align-items:center;justify-content:space-between;margin-top:8px">
+
                 <div class="small">₹399</div>
                 <button class="btn btn-primary small" onclick="buyBonus('bonus-menu-psychology',399)">Buy & Access →</button>
+
               </div>
             </div>
           </div>
@@ -225,10 +284,14 @@
             <div class="module-index" aria-hidden>🏷️</div>
             <div>
               <b>Festival & Seasonal Marketing Guide: Strategies to Double Sales</b>
+
               <p class="muted small">Plan irresistible festival offers, content, and promos that turn holidays into revenue spikes.</p>
+
               <div style="display:flex;align-items:center;justify-content:space-between;margin-top:8px">
+
                 <div class="small">₹1</div>
                 <button class="btn btn-primary small" onclick="buyBonus('bonus-seasonal-marketing',1)">Buy & Access →</button>
+
               </div>
             </div>
           </div>
@@ -238,10 +301,14 @@
             <div class="module-index" aria-hidden>🛡️</div>
             <div>
               <b>How to Create a Café Loyalty Program: Simple, Effective Strategies</b>
+
               <p class="muted small">Launch a no‑fuss loyalty system that boosts repeat visits — even without expensive software.</p>
+
               <div style="display:flex;align-items:center;justify-content:space-between;margin-top:8px">
+
                 <div class="small">₹249</div>
                 <button class="btn btn-primary small" onclick="buyBonus('bonus-loyalty',249)">Buy & Access →</button>
+
               </div>
             </div>
           </div>
@@ -251,10 +318,14 @@
             <div class="module-index" aria-hidden>📷</div>
             <div>
               <b>Photography Cheat Sheet: Mouth‑watering Café Food Pics on Phone</b>
+
               <p class="muted small">Shoot scroll‑stopping food photos using only your phone — lighting, angles, styling, and quick edits.</p>
+
               <div style="display:flex;align-items:center;justify-content:space-between;margin-top:8px">
+
                 <div class="small">₹229</div>
                 <button class="btn btn-primary small" onclick="buyBonus('bonus-food-photo',229)">Buy & Access →</button>
+
               </div>
             </div>
           </div>
@@ -267,12 +338,18 @@
       <h2>Q&A — Frequently Asked Questions</h2>
       <div class="grid">
         <details class="card"><summary><b>Will I be able to download the eBook?</b></summary><p class="muted">No. Access is read‑only inside your account to protect course IP. Downloads and print are disabled.</p></details>
+
         <details class="card"><summary><b>How do modules unlock?</b></summary><p class="muted">After successful payment, Module 1 unlocks instantly. Each subsequent module unlocks after you complete the previous one.</p></details>
+
         <details class="card"><summary><b>Is ₹299 a lifetime deal?</b></summary><p class="muted">Yes, for early buyers during the countdown. After the timer, the price switches to ₹799.</p></details>
+
         <details class="card"><summary><b>How do I reset my password?</b></summary><p class="muted">Use “Forgot password”. Enter your phone or email to receive an OTP, then set a new password.</p></details>
+
         <details class="card"><summary><b>How is payment handled?</b></summary><p class="muted">Payments go through Razorpay’s secure checkout. You’ll be redirected back automatically after success.</p></details>
+
       </div>
       <p class="small muted" style="margin-top:12px">⚠️ If you face any issues, email <a href="mailto:supportyuvapreneur@gmail.com">supportyuvapreneur@gmail.com</a>.</p>
+ 
     </section>
 
 
@@ -280,13 +357,16 @@
 
   <footer class="footer">
     <div class="container" style="display:grid;gap:20px;grid-template-columns:1fr;align-items:start">
+
       <div>
         <b>yuvapreneur.in</b>
         <p class="muted small">Learn, launch, and grow your café business the right way.</p>
+
       </div>
       <div>
         <b>Support</b>
         <p class="muted small">Email: <a href="mailto:supportyuvapreneur@gmail.com">supportyuvapreneur@gmail.com</a></p>
+
         <p class="muted small">Refunds & terms available on request.</p>
       </div>
       <div>
@@ -298,6 +378,7 @@
       </div>
     </div>
     <p class="small muted center">© <span id="yr"></span> yuvapreneur.in • All rights reserved.</p>
+
   </footer>
 
 
@@ -307,7 +388,7 @@
     document.getElementById('yr').textContent = new Date().getFullYear();
     
     // Razorpay Payment Page link
-    const PAYMENT_LINK = "https://rzp.io/rzp/k7glmFNB";
+    const PAYMENT_LINK = "https://rzp.io/rzp/rD8ThUeD";
 
     // Simple readiness check placeholder (we are using Payment Page redirects)
     function isRazorpayReady(){ return true; }
@@ -323,21 +404,12 @@
       }, 1000);
 
       // Show success overlay if redirected back from Razorpay or on /payment-success
+
       try {
         const url = new URL(window.location.href);
         const path = url.pathname.replace(/\/$/, '');
-        const hasRazorpayParams = (
-          url.searchParams.has('payment_id') ||
-          url.searchParams.has('razorpay_payment_id') ||
-          url.searchParams.has('razorpay_payment_link_id') ||
-          url.searchParams.get('status') === 'paid'
-        );
-        if (
-          path.endsWith('/payment-success') ||
-          url.searchParams.get('payment') === 'success' ||
-          hasRazorpayParams ||
-          (url.hash && /success/i.test(url.hash))
-        ) {
+        if (path.endsWith('/payment-success') || url.searchParams.get('payment') === 'success') {
+
           document.getElementById('successOverlay')?.classList.add('show');
         }
       } catch (e) { /* noop */ }
@@ -360,6 +432,7 @@
     const store = { users: {}, modulesUnlocked: {} };
 
     function scrollToId(id){ document.getElementById(id).scrollIntoView({behavior:'smooth'}); }
+
 
     function openEnrollmentForm(){ 
       scrollToId('enroll');
@@ -386,9 +459,11 @@
         // Store user data locally for demo purposes
         const key = formData.email || formData.phone;
         store.users[key] = { ...formData, paid: false, userId: Date.now().toString() };
+
         localStorage.setItem('yuv_userKey', key);
         
         // Redirect to Razorpay Payment Page (success redirect configured in Dashboard)
+
         try {
           const paymentUrl = PAYMENT_LINK;
           window.location.href = paymentUrl;
@@ -444,6 +519,7 @@
 
       try {
         // Redirect to Razorpay Payment Page (success redirect configured in Dashboard)
+
         try {
           const paymentUrl = PAYMENT_LINK;
           window.location.href = paymentUrl;
@@ -456,6 +532,7 @@
       } catch (error) {
         console.error('Bonus payment error:', error);
         alert('There was an issue with the bonus payment setup. Please try again.');
+
       }
     }
 
@@ -475,6 +552,7 @@
     // Update bonus UI after purchase
     function updateBonusUI(bonusId) {
       const bonusCard = document.querySelector(`[onclick*="${bonusId}"]`).closest('.card');
+
       if (bonusCard) {
         const button = bonusCard.querySelector('button');
         button.textContent = '✓ Purchased';

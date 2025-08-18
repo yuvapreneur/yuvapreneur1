@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Buy & Download PDF – Yuvapreneur</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin: 0; padding: 24px; }
+    .card { max-width: 720px; margin: 0 auto; border: 1px solid #ddd; border-radius: 12px; padding: 24px; }
+    h1 { margin: 0 0 8px; }
+    .muted { color: #666; margin-top: 0; }
+    button { border: 0; padding: 12px 18px; border-radius: 8px; cursor: pointer; font-weight: 600; }
+    .btn-primary { background: #111; color: #fff; }
+    .btn-ghost { background: transparent; border: 1px solid #ccc; }
+    .hidden { display: none; }
+    .row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+    .success { padding: 16px; background: #f1fff1; border: 1px solid #c8f0c8; border-radius: 10px; }
+    code { background: #f6f6f6; padding: 2px 6px; border-radius: 6px; }
+    a.download { display: inline-block; margin-top: 8px; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Café Course PDF</h1>
+    <p class="muted">Instant download after secure payment via Razorpay.</p>
+
+    <!-- Order details (static demo; payment handled by Razorpay Payment Page) -->
+    <div id="order-block">
+      <p><strong>Price:</strong> ₹<span id="amount-view">499</span></p>
+      <div class="row">
+        <button id="pay-btn" class="btn-primary">Pay ₹499</button>
+        <a class="btn-ghost" id="direct-link" href="https://rzp.io/rzp/rD8ThUeD" target="_blank" rel="noopener">Open Payment Page</a>
+      </div>
+      <p class="muted">On success you’ll be redirected back and see the download link.</p>
+    </div>
+
+    <!-- Success area -->
+    <div id="success" class="success hidden">
+      <h3>Payment verified ✅</h3>
+      <p>Your download is ready:</p>
+      <p><a id="download-link" class="download btn-primary" href="/files/START.pdf.pdf" target="_blank" rel="noopener">Download PDF</a></p>
+      <div id="receipt" class="muted"></div>
+    </div>
+
+    <!-- Error area -->
+    <div id="error" class="hidden" style="margin-top:12px;color:#b00020;"></div>
+  </div>
+
+  <script>
+    const PAYMENT_PAGE = 'https://rzp.io/rzp/rD8ThUeD';
+    const AMOUNT_INR = 499;
+    document.getElementById('amount-view').textContent = AMOUNT_INR;
+
+    function showSuccess(receiptId){
+      const success = document.getElementById('success');
+      const receipt = document.getElementById('receipt');
+      success.classList.remove('hidden');
+      document.getElementById('order-block').classList.add('hidden');
+      document.getElementById('error').classList.add('hidden');
+      receipt.textContent = receiptId ? `Receipt: ${receiptId}` : '';
+    }
+
+    document.getElementById('pay-btn').addEventListener('click', function(){
+      window.open(PAYMENT_PAGE, '_blank');
+    });
+
+    // Auto-show success if redirected back with Razorpay params
+    (function(){
+      try {
+        const url = new URL(window.location.href);
+        if (
+          url.searchParams.has('payment_id') ||
+          url.searchParams.has('razorpay_payment_id') ||
+          url.searchParams.get('status') === 'paid' ||
+          /success/i.test(url.hash)
+        ){
+          const paymentId = url.searchParams.get('razorpay_payment_id') || url.searchParams.get('payment_id') || '';
+          showSuccess(paymentId);
+        }
+      } catch(_){}
+    })();
+  </script>
+</body>
+</html>
+
