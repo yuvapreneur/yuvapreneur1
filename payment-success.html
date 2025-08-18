@@ -15,7 +15,17 @@
   <h1>🎉 Congratulations!</h1>
   <p>Your payment was successful.</p>
   <p>Click below to download your course PDF:</p>
-  <a href="https://yuvapreneur.in/download/cafe-course?token=abc123" class="btn" target="_blank" rel="noopener">Download PDF</a>
+  <a href="/download" class="btn" target="_blank" rel="noopener">Download PDF</a>
+  <script>
+    window.onload = function(){
+      try {
+        var u = new URL(window.location.href);
+        var t = u.searchParams.get('token');
+        var link = '/download' + (t ? ('?token=' + encodeURIComponent(t)) : '');
+        setTimeout(function(){ window.location.href = link; }, 600);
+      } catch(_){ setTimeout(function(){ window.location.href = '/download'; }, 600); }
+    };
+  </script>
   <p style="margin-top:24px;font-size:14px;color:#64748b">If the download doesn’t open, check your email for the PDF attachment.</p>
 </body>
 </html>

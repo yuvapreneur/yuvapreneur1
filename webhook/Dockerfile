@@ -9,6 +9,9 @@ WORKDIR /var/www/html
 COPY webhook/ /var/www/html/webhook/
 COPY webhook/.htaccess /var/www/html/.htaccess
 
+# Create writable data dir for token store
+RUN mkdir -p /var/www/html/data && chown -R www-data:www-data /var/www/html/data
+
 # Healthcheck endpoint
 RUN echo "OK" > /var/www/html/healthz
 

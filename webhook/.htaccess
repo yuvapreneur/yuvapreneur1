@@ -5,4 +5,6 @@
   # Support both /webhook/razorpay and /api/razorpay/webhook
   RewriteRule ^webhook/razorpay$ /webhook/razorpay.php [L]
   RewriteRule ^api/razorpay/webhook$ /webhook/razorpay.php [L]
+  # Download endpoint
+  RewriteRule ^download$ /webhook/download.php [L]
 </IfModule>

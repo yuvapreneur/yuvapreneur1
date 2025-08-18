@@ -411,8 +411,17 @@
         if (path.endsWith('/payment-success') || url.searchParams.get('payment') === 'success') {
 
           document.getElementById('successOverlay')?.classList.add('show');
-          // Auto-download redirect
-          setTimeout(function(){ window.location.href = 'https://yuvapreneur.in/download?token=abc123'; }, 800);
+          // Auto-download redirect (token should be present if redirected with one)
+          setTimeout(function(){
+            try {
+              var u = new URL(window.location.href);
+              var t = u.searchParams.get('token');
+              var link = 'https://yuvapreneur.in/download' + (t ? ('?token=' + encodeURIComponent(t)) : '');
+              window.location.href = link;
+            } catch(_) {
+              window.location.href = 'https://yuvapreneur.in/download';
+            }
+          }, 800);
         }
       } catch (e) { /* noop */ }
     });
