@@ -7,13 +7,13 @@
   <style>
     body { font-family: Arial, sans-serif; text-align: center; margin-top: 100px; }
     h1 { color: #16a34a; margin: 0 0 8px; }
-    .btn { display: inline-block; margin-top: 20px; padding: 12px 24px; background-color: #111; color: white; text-decoration: none; border-radius: 8px; font-size: 16px; }
+    .btn, .cta { display: inline-block; margin-top: 20px; padding: 12px 24px; background-color: #111; color: white; text-decoration: none; border-radius: 8px; font-size: 16px; }
     p { color: #334155; margin: 6px 0; }
     .err { color: #b00020; margin-top: 12px; }
   </style>
   <script>
     document.addEventListener('DOMContentLoaded', async () => {
-      const linkHref = '/files/cafe-course.pdf';
+      const linkHref = '/mnt/data/cafe%20course%20by%20abhijeet%20pdf.pdf';
       try {
         const res = await fetch(linkHref, { method: 'HEAD', cache: 'no-store' });
         if (!res.ok) throw new Error('missing');
@@ -36,7 +36,7 @@
 <body>
   <h1>✅ Payment Successful</h1>
   <p>Thank you for your payment. Click below to download your PDF.</p>
-  <p><a id="dl" class="btn" href="/files/cafe-course.pdf" download>Download PDF</a></p>
+  <p><a id="dl" class="cta" href="/mnt/data/cafe%20course%20by%20abhijeet%20pdf.pdf" download>Download Your PDF</a></p>
   <p id="err" class="err" aria-live="polite"></p>
 </body>
 </html>
