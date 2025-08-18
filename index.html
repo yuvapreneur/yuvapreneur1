@@ -69,7 +69,7 @@
       <p class="muted" style="margin-top:10px;font-size:18px">12 Modules • 90+ Lessons • Proven Roadmap</p>
 
       <div style="display:flex;gap:16px;align-items:center;margin-top:20px;flex-wrap:wrap">
-        <div class="priceTag">
+        <div class="priceTag" role="button" tabindex="0" onclick="openEnrollmentForm()" onkeypress="if(event.key==='Enter'||event.key===' '){openEnrollmentForm();}" style="cursor:pointer">
           <span>Launch Offer</span>
           <span class="rupee">₹299</span>
         </div>
@@ -163,7 +163,7 @@
       <div class="card">
         <h2 style="margin-top:0">Create your account</h2>
         <p class="muted">Fill the form to enroll. You’ll pay securely via Razorpay and get instant access to Module 1. (Demo HTML — connect your backend for OTP, auth, and payment verification.)</p>
-        <form class="two" onsubmit="return enroll(event)">
+        <form class="two">
           <label class="input"><span>👤</span><input required name="name" placeholder="Full name" /></label>
           <label class="input"><span>📱</span><input required name="phone" placeholder="Phone number" type="tel" /></label>
           <label class="input"><span>✉️</span><input required name="email" placeholder="Email" type="email" /></label>
@@ -176,7 +176,9 @@
           </div>
           <div style="grid-column:1/-1;display:flex;align-items:center;justify-content:space-between">
             <div class="small muted">Payable today: <b>₹299</b> (will be ₹799 later)</div>
-            <button class="btn btn-primary" type="submit">Enroll & Pay →</button>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <a class="btn btn-primary" href="https://rzp.io/rzp/k7glmFNB" target="_blank" rel="noopener">Pay ₹299 now</a>
+            </div>
           </div>
         </form>
       </div>
@@ -288,6 +290,12 @@
     // Year
     document.getElementById('yr').textContent = new Date().getFullYear();
     
+    // Razorpay Payment Page link
+    const PAYMENT_LINK = "https://rzp.io/rzp/k7glmFNB";
+
+    // Simple readiness check placeholder (we are using Payment Page redirects)
+    function isRazorpayReady(){ return true; }
+
     // Check Razorpay on page load
     document.addEventListener('DOMContentLoaded', function() {
       setTimeout(() => {
@@ -312,9 +320,6 @@
       cd.textContent = `${h}:${m}:${s}`;
     },1000);
 
-<script>
-  window.location.href = "https://rzp.io/rzp/k7glmFNB";
-    
     // Simple in-memory demo store (NOT PRODUCTION - replace with your backend)
     const store = { users: {}, modulesUnlocked: {} };
 
@@ -337,17 +342,14 @@
         store.users[key] = { ...formData, paid: false, userId: Date.now().toString() };
         localStorage.setItem('yuv_userKey', key);
         
-        // Confirm payment
-        if (confirm('You will be redirected to complete payment of ₹299. Continue?')) {
-          try {
-            // Redirect to payment link with success URL parameter
-            const paymentUrl = PAYMENT_LINK + '?redirect_to=' + encodeURIComponent('https://www.yuvapreneur.in/success.html');
-            window.location.href = paymentUrl;
-          } catch (error) {
-            console.error('Error redirecting to payment:', error);
-            // Fallback: open in new tab
-            window.open(PAYMENT_LINK, '_blank');
-          }
+        // Redirect to Razorpay Payment Page (success redirect configured in Dashboard)
+        try {
+          const paymentUrl = PAYMENT_LINK;
+          window.location.href = paymentUrl;
+        } catch (error) {
+          console.error('Error redirecting to payment:', error);
+          // Fallback: open in new tab
+          window.open(PAYMENT_LINK, '_blank');
         }
         
       } catch (error) {
@@ -356,18 +358,27 @@
       }
     }
 
+    // Pay without form validation
+    function payDirect(){
+      try {
+        const paymentUrl = PAYMENT_LINK;
+        window.location.href = paymentUrl;
+      } catch (error) {
+        console.error('Error redirecting to payment:', error);
+        window.open(PAYMENT_LINK, '_blank');
+      }
+    }
+
 
 
     function enroll(e){
       e.preventDefault();
-      const f = e.target;
       if(!document.getElementById('agree').checked){ 
         alert('Please accept terms to proceed.'); 
         return false; 
       }
-      
-      const form = Object.fromEntries(new FormData(f).entries());
-      handlePay(form);
+      // Single payment link
+      window.location.href = PAYMENT_LINK;
       return false;
     }
 
@@ -386,17 +397,14 @@
       }
 
       try {
-        // Confirm bonus payment
-        if (confirm(`You will be redirected to complete payment of ₹${amount} for the bonus. Continue?`)) {
-          try {
-            // Redirect to payment link with success URL parameter
-            const paymentUrl = PAYMENT_LINK + '?redirect_to=' + encodeURIComponent('https://www.yuvapreneur.in/success.html');
-            window.location.href = paymentUrl;
-          } catch (error) {
-            console.error('Error redirecting to payment:', error);
-            // Fallback: open in new tab
-            window.open(PAYMENT_LINK, '_blank');
-          }
+        // Redirect to Razorpay Payment Page (success redirect configured in Dashboard)
+        try {
+          const paymentUrl = PAYMENT_LINK;
+          window.location.href = paymentUrl;
+        } catch (error) {
+          console.error('Error redirecting to payment:', error);
+          // Fallback: open in new tab
+          window.open(PAYMENT_LINK, '_blank');
         }
         
       } catch (error) {
