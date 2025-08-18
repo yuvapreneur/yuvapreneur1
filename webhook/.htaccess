@@ -2,5 +2,7 @@
   RewriteEngine On
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
+  # Support both /webhook/razorpay and /api/razorpay/webhook
   RewriteRule ^webhook/razorpay$ /webhook/razorpay.php [L]
+  RewriteRule ^api/razorpay/webhook$ /webhook/razorpay.php [L]
 </IfModule>
