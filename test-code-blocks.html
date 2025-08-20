@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Code Block Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .code-block { background: #f4f4f4; padding: 15px; border-radius: 5px; margin: 10px 0; }
+        pre { margin: 0; white-space: pre-wrap; }
+        code { background: #e8e8e8; padding: 2px 4px; border-radius: 3px; }
+    </style>
+</head>
+<body>
+    <h1>Code Block Rendering Test</h1>
+    
+    <h2>HTML Code Block:</h2>
+    <div class="code-block">
+        <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;Test&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Hello World&lt;/h1&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+    </div>
+    
+    <h2>JavaScript Code Block:</h2>
+    <div class="code-block">
+        <pre><code>function hello() {
+    console.log("Hello World");
+    return "Success";
+}</code></pre>
+    </div>
+    
+    <h2>CSS Code Block:</h2>
+    <div class="code-block">
+        <pre><code>.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}</code></pre>
+    </div>
+    
+    <h2>Inline Code:</h2>
+    <p>This is an example of <code>inline code</code> that should render properly.</p>
+    
+    <script>
+        // Test JavaScript execution
+        console.log("Code block test page loaded successfully");
+        
+        // Test template literals (should work now)
+        const message = "Hello " + "World";
+        document.body.innerHTML += "<p><strong>JavaScript Test:</strong> " + message + "</p>";
+    </script>
+</body>
+</html>

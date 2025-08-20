@@ -128,7 +128,7 @@
       <div style="display:flex;gap:12px;margin-top:24px;flex-wrap:wrap">
         <button class="btn btn-primary" onclick="openEnrollmentForm()">Enroll Now (₹1)</button>
         <a class="btn btn-outline" href="#modules">See Modules →</a>
-        <a class="btn btn-outline" href="/buy.html">Buy & Download PDF →</a>
+        <a class="btn btn-outline" href="/buy.html">Buy &amp; Download PDF →</a>
       </div>
     </section>
 
@@ -436,7 +436,7 @@
       const h = String(Math.floor(diff/3.6e6)).padStart(2,'0');
       const m = String(Math.floor((diff%3.6e6)/6e4)).padStart(2,'0');
       const s = String(Math.floor((diff%6e4)/1e3)).padStart(2,'0');
-      cd.textContent = `${h}:${m}:${s}`;
+      cd.textContent = h + ':' + m + ':' + s;
     },1000);
 
     // Simple in-memory demo store (NOT PRODUCTION - replace with your backend)
@@ -562,7 +562,7 @@
 
     // Update bonus UI after purchase
     function updateBonusUI(bonusId) {
-      const bonusCard = document.querySelector(`[onclick*="${bonusId}"]`).closest('.card');
+      const bonusCard = document.querySelector('[onclick*="' + bonusId + '"]').closest('.card');
 
       if (bonusCard) {
         const button = bonusCard.querySelector('button');
